@@ -1,0 +1,389 @@
+% =====================================================================
+% chapters/06_discussion.tex
+% Chapter 6 — Discussion
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% This chapter interprets the results reported in Chapter 5; it does not
+% re-tabulate them. Numerical values are quoted only where needed to anchor
+% an interpretation, and refer back to the controlled tables of Chapter 5.
+% Controlled benchmark results and historical development results are kept
+% strictly separate. No claim of real-world deployment readiness is made.
+% =====================================================================
+
+\chapter{Discussion}
+\label{ch:discussion}
+
+This chapter interprets the empirical results of Chapter~\ref{ch:results}. The
+guiding question is not only \emph{how well} the pipelines perform, but
+\emph{where} performance is gained and lost, and \emph{what that implies} for
+the dataset and protocol used in this work.
+
+% ---------------------------------------------------------------------
+\section{Interpretation of the Main Findings}
+\label{sec:disc-main}
+
+The central pattern across all experiments is a decoupling between
+\emph{representation learnability} and \emph{automatic segmentation
+reliability}. When running cycles are correctly segmented, the markerless pose
+representation is clearly sufficient: the handmade upper bound separates
+correct from false technique at a macro-F1 near 0.90
+(Section~\ref{sec:handmade}) . When the same representation and classifiers are
+driven by automatically detected cycles, performance falls to roughly chance
+(Section~\ref{sec:autocorr-baseline}) . The natural reading is that the
+classification \emph{model} is not the binding constraint; the binding
+constraint is the upstream pipeline that converts raw, uncontrolled video into
+clean, comparable cycle samples.
+
+This conclusion is supported at two levels. The fixed-split benchmark shows a
+drop from 0.8991 macro-F1 for handmade cycles to 0.5417 for the autocorr
+baseline. The fair-gap robustness check then repeats the comparison with the
+same MLP classifier under 5-fold video-level cross-validation: handmade cycles
+reach $0.860 \pm 0.016$ macro-F1, while autocorr cycles reach
+$0.615 \pm 0.081$, leaving a fair gap of 0.245. Thus, the loss is not only a
+single-split artefact; it remains visible when the comparison is repeated across
+video-level folds.
+
+This interpretation reframes the contribution of the thesis. The work does not
+claim a high-accuracy automatic classifier. Instead, it provides evidence,
+through a matched upper-bound/baseline design and a series of ablations, that
+the difficulty of in-the-wild running-technique analysis lies predominantly in
+robust cycle detection and pose quality rather than in the choice of classifier
+or representation depth. Every subsequent section in this chapter can be read
+as locating one facet of that bottleneck.
+
+% ---------------------------------------------------------------------
+\section{Effect of Cycle Source}
+\label{sec:disc-cycle-source}
+
+The comparison between the handmade and autocorrelation (autocorr) pipelines
+(Section~\ref{sec:hm-vs-ac}) is the most informative single contrast in the
+study. Because the two pipelines share the landmark representation, classifier
+family, split, and reporting protocol, the large gap between them isolates the
+effect of cycle segmentation almost cleanly: the manual and automatic pipelines
+differ chiefly in \emph{how cycle boundaries are obtained}. The fair-gap
+robustness check strengthens this interpretation: under the same MLP classifier
+and 5-fold video-level cross-validation, handmade cycles achieve
+$0.860 \pm 0.016$ macro-F1, whereas autocorr cycles achieve
+$0.615 \pm 0.081$. The 0.245 macro-F1 fair gap shows that the fixed-split
+drop is not simply due to one unlucky train/test partition.
+
+Two mechanisms plausibly explain the gap. First, automatic detection discards a
+substantial fraction of the data: many videos yield no usable cycle at all, and
+of those that do, a large share of raw cycles are rejected by the
+duration/quality filters (Section~\ref{sec:signal-ablation}). The surviving
+cycles are therefore both fewer and biased toward easier cases. Second, even
+retained cycles may have imprecise foot-strike-to-foot-strike boundaries, so
+that the eight-phase samples are not temporally aligned across examples. A
+classifier that performed well on manually aligned phases then faces a
+distribution of misaligned, partially mis-segmented inputs. 
+
+The validation-to-test collapse of the sequential models under automatic cycles
+(Section~\ref{sec:autocorr-baseline}) is consistent with this misalignment: the
+models latch onto regularities that do not transfer once boundaries vary. The
+practical message is that improving the automatic pipeline should target
+detection coverage and boundary precision before any change to the classifier.
+
+The permutation test further tempers the interpretation of the autocorr signal.
+The observed autocorr MLP CV macro-F1 was 0.5206, compared with a permutation
+null mean of 0.468 and $p = 0.2475$. This does not prove that the automatic
+features contain no information; rather, it suggests that the information is
+weak and unstable under a simple MLP configuration. This is consistent with a
+pipeline whose errors originate upstream in cycle boundary quality.
+
+% ---------------------------------------------------------------------
+\section{Effect of Representation: Landmark versus Image}
+\label{sec:disc-representation}
+
+On a matched automatic cycle source, the landmark representation clearly
+outperformed the RGB-crop image representation
+(Section~\ref{sec:representation}), and the image pipeline collapsed below
+chance in the controlled rerun (Section~\ref{sec:image-results}). At first
+sight this is surprising, since RGB crops carry strictly more raw information
+(silhouette, limb contour, clothing-relative motion) than sparse landmarks.
+
+The likely explanation is not that this information is useless, but that the
+image pipeline cannot exploit it reliably under the present conditions: a small
+training set, a high-capacity visual backbone prone to overfitting, and crop
+instability driven by the same noisy pose estimates that bound the boundary
+quality. In effect, the image pipeline inherits the segmentation bottleneck and
+adds a second source of variance --- the runner-centred crop --- on top of it.
+
+The landmark representation, by contrast, acts as a compact inductive bias:
+by reducing each frame to a fixed set of joint coordinates, it discards
+appearance variation that would otherwise have to be learned away from limited
+data. For this dataset, that compression is an advantage rather than a loss.
+The appropriate conclusion is conditional: image-based modelling is not
+invalidated in principle, but the current implementation is not yet stable
+enough to compete with the landmark baseline. A fair re-test would require more
+data and more robust cropping.
+
+This is also the right place to interpret the historical
+\texttt{autocorr\_fixed} (val\_acc 76.5) milestone
+(Section~\ref{sec:version-history}) . It represents the most technically ambitious
+step in the project's development --- the move from landmark-only sequences to
+an image-based MobileNetV2--LSTM pipeline --- and it motivated the organised
+image-based rerun. However, its 76.5\% figure is a historical validation
+accuracy from a development notebook, recorded under a different protocol and
+never re-confirmed on the fixed test split. The controlled rerun did not
+reproduce it. The milestone is therefore valuable as evidence of methodological
+exploration and as the reason the image direction was worth testing, but it
+cannot serve as a benchmark and must not be compared directly against the
+controlled landmark baseline.
+
+% ---------------------------------------------------------------------
+\section{Effect of Model Architecture}
+\label{sec:disc-model}
+
+The model ablation (Section~\ref{sec:model-ablation}) shows that architecture
+matters far less than data quality. On the clean handmade data, the CNN-BiLSTM
+achieved the strongest macro-F1, while the 1D-CNN, BiLSTM, and MLP remained
+close enough to show that the spread across architectures was narrow. This
+indicates that, given well-segmented cycles, the discriminative signal is
+accessible to several standard architectures and does not depend solely on deep
+temporal machinery.
+
+On the automatic pipeline the more expressive sequential models behaved
+unstably. The 1D-CNN and BiLSTM both produced zero F1 for the false class at
+their operating thresholds, while the CNN-BiLSTM looked best at the default
+0.5 threshold but became unstable under validation-tuned thresholding. High-capacity sequence models
+are precisely those most able to overfit the spurious regularities introduced
+by inconsistent segmentation, so their poor generalisation is symptomatic of
+the upstream noise rather than of an architectural deficiency. The robustness
+of the simple MLP as the reported automatic baseline follows from the same
+logic: with noisy, scarce inputs, a lower-variance model is preferable. This
+argues against reaching for larger classifiers as a remedy for the automatic
+pipeline's weakness.
+
+% ---------------------------------------------------------------------
+\section{Effect of Signal Choice}
+\label{sec:disc-signal}
+
+The signal ablation (Section~\ref{sec:signal-ablation}) exposed a tension
+between two notions of a ``good'' detection signal. The vertical-oscillation
+signals (\texttt{head\_y}, \texttt{hip\_y}) detected cycles in more videos and,
+for \texttt{hip\_y}, even produced the highest downstream classification
+macro-F1. Yet they admitted many ill-formed cycles, reflected in weak mean
+autocorrelation and a large number of duration-based rejections.
+
+The \texttt{contact\_diff} signal showed a different profile: fewer detected
+videos, but cycle boundaries that were more directly tied to foot-contact
+events and therefore more suitable for foot-strike-to-foot-strike sampling.
+Selecting \texttt{contact\_diff} as the baseline signal therefore reflects a
+deliberate preference for boundary \emph{precision} over detection
+\emph{coverage}. This is the defensible choice for a pipeline whose downstream
+representation is an eight-phase sampling that assumes accurate
+foot-strike-to-foot-strike boundaries: a cleanly segmented minority is more
+useful than a larger but temporally inconsistent set. 
+
+The fact that \texttt{hip\_y} scored a higher macro-F1 is interpreted cautiously, given the
+small test set and the risk that more permissive detection coincided with
+easier videos rather than with genuinely better segmentation. The broader
+lesson is that signal selection for in-the-wild data must be judged on
+segmentation quality, not only on a single end-to-end accuracy number.
+
+% ---------------------------------------------------------------------
+\section{Effect of Feature Representation}
+\label{sec:disc-feature}
+
+The feature ablation (Section~\ref{sec:feature-ablation}) found that the
+selected 13-landmark representation and the selected-landmark-plus-velocity
+variant matched the best handmade macro-F1, while the full 33-landmark and
+lower-body-only variants remained close but did not improve the overall
+macro-F1. The conservative interpretation is that additional landmarks may
+carry complementary cues for one class, but they did not produce a more robust
+overall result on this split.
+
+The near-equivalence of the selected-landmark
+configurations supports using the compact representation as the pipeline
+default, especially for the automatic experiments where every additional input
+dimension also imports additional pose-estimation noise. This connects back to the representation discussion
+(Section~\ref{sec:disc-representation}): both results favour parsimony.
+Reducing the input to a small, well-chosen set of joints limits the model's
+exposure to noise and to spurious appearance variation, which is advantageous
+precisely because the dataset is small and the upstream estimates are imperfect.
+The choice of features should therefore be coupled to the data regime rather
+than maximised in isolation.
+
+% ---------------------------------------------------------------------
+\section{Effect of Frame Resolution per Cycle}
+\label{sec:disc-frames}
+
+The frames-per-cycle ablation (Section~\ref{sec:frames-ablation}) showed no
+benefit from increasing temporal resolution beyond the eight-phase
+representation, and there was no monotonic trend across frame counts. The
+eight-phase sampling remained the strongest and most compact setting. The
+interpretation is that eight phases already capture the salient kinematic
+structure of a running cycle for this binary task; finer sampling mostly adds
+redundant frames and, on limited data, additional opportunity to overfit rather
+than additional discriminative signal.
+
+This finding has a useful methodological consequence: the eight-phase
+representation is justified not merely by convention but by an explicit
+cost-benefit comparison. It keeps sample dimensionality low, which is
+consistent with the parsimony favoured by the model and feature analyses, and
+it reduces the computational burden of the pipeline without a meaningful
+accuracy penalty.
+
+% ---------------------------------------------------------------------
+\section{Cycle-Level versus Video-Level Interpretation}
+\label{sec:disc-cycle-video}
+
+Aggregating cycle predictions to the video level by majority vote consistently
+improved the automatic baseline (Section~\ref{sec:cycle-vs-video}), and the same
+direction held for the other pipelines. This is the expected behaviour when
+per-cycle predictions contain independent noise: aggregating several cycles from
+the same video lets correct predictions outweigh sporadic errors, reducing
+variance. Because the underlying data unit is the video, not the cycle,
+video-level reporting is also the more faithful measure of practical
+performance and is therefore the appropriate headline metric for any future
+deployment-oriented evaluation.
+
+The interpretation must nonetheless be tempered by sample size. The video-level
+evaluation rests on only a handful of test videos, several of which contribute a
+single cycle. The improvement from aggregation is consistent and theoretically
+motivated, but its precise magnitude is uncertain at this scale, and the result
+should be read as directional evidence rather than as a calibrated estimate.
+
+% ---------------------------------------------------------------------
+\section{Effect of Threshold Selection}
+\label{sec:disc-threshold}
+
+The threshold analysis (Section~\ref{sec:threshold}) revealed an asymmetry
+between the clean and the automatic pipelines. On the handmade data,
+validation-selected thresholds were mostly neutral or beneficial. On the
+automatic data, the same procedure left the robust MLP unchanged but sharply
+degraded the sequential models, with the CNN-BiLSTM losing substantial macro-F1
+and being flagged as threshold-overfit.
+
+This is the resolution of the apparent
+contradiction with the model ablation: the CNN-BiLSTM looks best at the default
+threshold but is unstable once a validation-chosen threshold is applied to
+test, whereas the MLP is stable, which is why it is the reported baseline.
+The deeper interpretation is that decision-threshold tuning is only as reliable
+as the validation set on which it is performed. With a small validation split
+and noisy automatic cycles, the validation-optimal threshold need not transfer,
+and tuning can transfer noise rather than signal. 
+
+The methodological
+implication, reflected in the reporting throughout Chapter~\ref{ch:results}, is
+that any tuned result must state that the threshold was selected on validation
+and must be accompanied by the default-threshold result, so that threshold
+overfitting is visible rather than hidden.
+
+% ---------------------------------------------------------------------
+\section{Effect of Pose and Cycle Quality}
+\label{sec:disc-quality}
+
+The quality analysis (Section~\ref{sec:quality}) provides the most direct
+evidence for the segmentation-bottleneck interpretation. Classification
+accuracy on the automatic pipeline rose with higher heel visibility, lower
+landmark missing-ratio, and stronger autocorrelation of the cycle signal. In
+other words, the errors are not distributed uniformly across the test set; they
+concentrate in cycles where pose estimation is unreliable or the periodic
+structure is weak.
+
+Together with the failed-video breakdown, which attributes
+the majority of failures to the cycle-detection stage, this locates the
+dominant error source firmly upstream of the classifier. This is the unifying thread of the discussion. The cycle-source gap
+(Section~\ref{sec:disc-cycle-source}), the fragility of expressive models under
+automatic cycles (Section~\ref{sec:disc-model}), the preference for the
+boundary-precise \texttt{contact\_diff} signal
+(Section~\ref{sec:disc-signal}), and the instability of the image pipeline
+(Section~\ref{sec:disc-representation}) are all consequences of the same
+underlying limitation: imperfect markerless pose estimation and the difficulty
+of detecting clean running cycles in uncontrolled footage. The quality analysis
+makes that limitation measurable.
+
+% ---------------------------------------------------------------------
+\section{Error Analysis}
+\label{sec:disc-error}
+
+Synthesising the error evidence, three failure modes can be distinguished. First, \emph{detection failures}: videos in which no usable cycle is found, so
+the system cannot make a prediction at all; these dominate the failed-video
+counts and arise mainly at the cycle-detection stage
+(Section~\ref{sec:quality}) . Second, \emph{segmentation errors}: cycles that are
+detected but poorly bounded, producing misaligned eight-phase samples that
+degrade classification even when pose visibility is adequate; the
+validation-to-test collapse of the sequential models is the clearest symptom
+(Section~\ref{sec:autocorr-baseline}) . Third, \emph{classifier errors} on
+genuinely clean cycles, which the handmade results show to be comparatively
+rare.
+
+The relative weight of these modes is itself a result: the first two,
+both upstream, account for the bulk of the gap between the upper bound and the
+automatic baseline, while the third is small. This ordering should guide
+remediation. Reducing detection and segmentation errors --- through more robust
+pose estimation, better signal conditioning, or a learned boundary detector
+trained on more data --- is likely to yield far larger gains than further work
+on the classifier. The exploratory boundary-detector and raw-sequence pipelines
+(Section~\ref{sec:bd-raw}) are first steps in that direction, but on the present
+data they did not yet improve over the rule-based baseline and remain
+inconclusive.
+
+% ---------------------------------------------------------------------
+\section{Limitations}
+\label{sec:disc-limitations}
+
+Several limitations bound the conclusions of this work. The dataset is small,
+and the validation and test splits in particular are very small
+(Section~\ref{sec:dataset-stats}) ; consequently, single-point differences,
+figures after threshold tuning, and the highest-scoring feature configuration
+should be treated as indicative rather than precise. The 5-fold fair-gap check
+partly mitigates this concern by repeating the main handmade--autocorr contrast
+across folds, but it does not remove the need for a larger external dataset. The video-level results
+also rest on few videos. The class distribution is moderately imbalanced at the
+video level, which is mitigated but not eliminated by the use of macro-F1
+\cite{sokolova2009metrics}.
+
+The pipeline also inherits the limitations of its components. Markerless pose
+estimation is itself noisy on in-the-wild footage \cite{bazarevsky2020blazepose}.
+Recent markerless-running analyses also note that such noise can affect
+downstream biomechanical interpretation \cite{panconi2024markerless}. In this
+pipeline, that noise propagates into signal extraction, cycle detection, and
+--- for the image pipeline --- crop stability. 
+
+Cycle detection relies on a
+periodicity assumption that does not hold for very short clips or atypical gait,
+contributing to detection failures. The handmade pipeline, used as the upper
+bound, depends on manual segmentation and therefore reflects an idealised
+condition that an automatic system cannot fully attain. Finally, all results
+are obtained on a single corpus collected under one labelling convention;
+generalisation to other populations, camera viewpoints, and definitions of
+``correct'' technique remains untested. The historical version-history results
+(Section~\ref{sec:version-history}) are excluded from all benchmark claims for
+the reasons given above and add a further caution against over-reading
+development-stage numbers. The permutation test is also limited by the same
+small autocorr sample size and should be interpreted as a diagnostic robustness
+check, not as a definitive statistical claim about all possible classifiers.
+
+% ---------------------------------------------------------------------
+\section{Practical Implications}
+\label{sec:disc-practical}
+
+The practical implications follow directly from the bottleneck analysis. For
+researchers and practitioners building on this work, effort is best invested in
+the upstream stages: more robust markerless pose estimation, signal conditioning
+that improves cycle-boundary precision, and data-driven boundary detection
+trained on enough examples to outperform rule-based autocorrelation. The
+evidence indicates that such improvements would raise the automatic pipeline
+toward the handmade upper bound more effectively than any change to the
+classifier or any increase in temporal or feature resolution. Where an
+automatic system is used, predictions should be reported and consumed at the
+video level, with explicit handling of videos for which no reliable cycle can
+be detected.
+
+It must be stated plainly that these results do not establish deployment
+readiness. The automatic pipeline performs near chance on the controlled test
+set, the evaluation rests on a small single-source dataset, and the upper bound
+depends on manual segmentation that a deployed system would not have. 
+
+The
+appropriate framing of the contribution is diagnostic: the work demonstrates
+that markerless pose sequences can encode running-technique distinctions when
+cycles are clean, and it identifies, through controlled comparison and
+ablation, exactly where an automatic in-the-wild system currently breaks down.
+Turning that diagnosis into a usable tool is left to future work
+(Chapter~\ref{ch:conclusion}) .
+
+% End of Chapter 6

@@ -1,0 +1,231 @@
+% =====================================================================
+% chapters/07_conclusion.tex
+% Chapter 7 — Conclusion and Future Work
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% Headline metrics quoted below are the controlled results established in
+% Chapter 5; they are not re-derived here. No claim of clinical,
+% professional, or real-world deployment readiness is made.
+% =====================================================================
+
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+% ---------------------------------------------------------------------
+\section{Conclusion}
+\label{sec:concl-summary}
+
+This thesis addressed the problem of classifying running technique as correct or
+false from \emph{in-the-wild} internet videos using markerless pose estimation
+and deep learning. The work developed a complete pipeline consisting of
+markerless pose estimation, landmark filtering and normalisation, motion-signal
+extraction, running-cycle detection, eight-phase sampling, landmark-based or
+image-based cycle representation, deep-learning classification, and evaluation
+under a fixed split by video identifier.
+
+The experimental design separated two questions that are often mixed together:
+whether the pose representation is learnable when cycle boundaries are reliable,
+and how much performance is lost when cycle boundaries must be detected
+automatically. The handmade landmark pipeline, using controlled cycle
+segmentation, reached a test accuracy of 0.9107 and a macro-F1 of 0.8991. This
+result is interpreted as an upper bound, not as a deployment baseline. The
+autocorrelation-based landmark pipeline, using automatic cycles detected from
+the \texttt{contact\_diff} signal, reached a test accuracy of 0.5455 and a
+macro-F1 of 0.5417 under the reported baseline setting. Because the two
+pipelines use the same general pose-representation family but differ in cycle
+source, the gap between them localises the main difficulty of the task in the
+automatic cycle-detection stage. This interpretation is supported by an
+additional fair-gap robustness check: under the same MLP classifier and
+5-fold video-level cross-validation, handmade cycles achieved
+$0.860 \pm 0.016$ macro-F1, whereas autocorr cycles achieved
+$0.615 \pm 0.081$, giving a fair gap of 0.245 macro-F1. A 100-permutation test
+on the autocorr MLP setting did not reach statistical significance
+($p = 0.2475$), suggesting that the autocorr-derived features are not yet
+robustly separable under that simple classifier.
+
+The ablation studies and extended analyses refine this conclusion. The model
+ablation showed that architecture choice matters less than segmentation quality:
+the CNN-BiLSTM is strongest on clean handmade cycles, while the simpler MLP is
+more stable as the reported automatic baseline after validation-based threshold
+selection. The feature ablation showed that compact selected-landmark
+representations are sufficient and competitive with larger landmark sets. The
+frames-per-cycle ablation showed that eight-phase sampling is an efficient
+choice, since increasing the number of sampled frames did not improve macro-F1.
+
+The signal ablation showed a trade-off between detection coverage and
+semantically meaningful foot-strike-to-foot-strike boundaries; \texttt{contact\_diff}
+was therefore retained as the main baseline signal even though \texttt{hip\_y}
+achieved the highest classification macro-F1 in the signal ablation. The
+controlled landmark-versus-image comparison showed that the RGB-crop
+MobileNetV2--LSTM pipeline did not reproduce the historical image-based
+development result and was not stable enough to replace the landmark baseline.
+
+Taken together, the results support a diagnostic conclusion. Markerless pose
+sequences can encode correct-versus-false running-technique differences when
+cycles are clean, but the current automatic pipeline is limited by pose quality,
+cycle detection, and boundary alignment. The fixed-split result and the
+cross-validation robustness check point to the same conclusion, while the
+permutation test shows that the autocorr representation remains statistically
+fragile under a simple MLP. The thesis therefore does not claim
+real-world deployment readiness. Its contribution is to identify where the
+automatic in-the-wild pipeline succeeds, where it fails, and which components
+should be improved before any practical feedback system is attempted.
+
+% ---------------------------------------------------------------------
+\section{Answers to Research Questions}
+\label{sec:concl-rqs}
+
+The seven research questions introduced in Section~\ref{sec:intro-rqs} are
+answered below using the controlled results from Chapter~\ref{ch:results}.
+
+\paragraph{RQ1 --- Can pose-based classifiers distinguish correct from false
+technique under reliable segmentation?}
+Yes. Under reliable manually controlled cycle segmentation, the handmade
+landmark upper bound reached a test accuracy of 0.9107 and a macro-F1 of
+0.8991. All handmade models exceeded 0.85 macro-F1, and the best CNN-BiLSTM
+model reached the strongest overall result. This shows that the markerless pose
+representation contains useful information for distinguishing correct from
+false running technique when the running cycles are cleanly segmented.
+
+\paragraph{RQ2 --- How much performance is lost when handmade cycles are
+replaced by automatic autocorrelation-based detection?}
+The loss is substantial. On the controlled fixed split, the reported autocorr
+landmark baseline reached a test accuracy of 0.5455 and a macro-F1 of 0.5417,
+compared with 0.9107 accuracy and 0.8991 macro-F1 for the handmade upper
+bound. This corresponds to a drop of 0.3652 in accuracy and 0.3574 in
+macro-F1. The fair 5-fold video-level CV check confirms that this loss is not
+only a fixed-split artefact: under the same MLP classifier and threshold 0.5,
+handmade cycles reached $0.860 \pm 0.016$ macro-F1, while autocorr cycles
+reached $0.615 \pm 0.081$, leaving a fair gap of 0.245 macro-F1. A permutation
+test on the autocorr MLP setting did not reach statistical significance
+($p = 0.2475$), suggesting that autocorr-derived features are not yet robustly
+separable under this simple classifier. Since the comparison keeps the general
+landmark-representation family fixed while changing the cycle source, the loss
+is attributed primarily to automatic cycle detection and boundary alignment.
+
+\paragraph{RQ3 --- Which motion signal is most reliable for automatic cycle
+detection?}
+The answer depends on the criterion. In the signal ablation, \texttt{hip\_y}
+achieved the highest downstream classification macro-F1 (0.7321) and accuracy
+(0.7333). However, \texttt{contact\_diff} was retained as the main automatic
+baseline signal because it is more directly tied to foot-contact dynamics and
+supports foot-strike-to-foot-strike cycle interpretation. Thus, \texttt{hip\_y}
+was the strongest signal by classification score in this ablation, while
+\texttt{contact\_diff} was the most appropriate baseline signal for
+semantically aligned cycle detection.
+
+\paragraph{RQ4 --- Which architecture is most suitable for eight-phase pose
+sequences?}
+The answer is pipeline-dependent. On the handmade upper-bound pipeline, the
+CNN-BiLSTM achieved the best macro-F1 (0.8991), indicating that local temporal
+patterns and sequential modelling are useful when cycle alignment is reliable.
+On the automatic autocorr pipeline, the CNN-BiLSTM was strongest at the default
+0.5 threshold, but it became unstable under validation-tuned thresholding. The
+MLP was therefore used as the more robust reported automatic baseline. This
+suggests that higher model capacity is useful only when the cycle samples are
+reliable; it does not compensate for noisy automatic segmentation.
+
+\paragraph{RQ5 --- How do feature representation and frames-per-cycle affect
+performance?}
+The selected 13-landmark representation and the selected-landmark-plus-velocity
+variant matched the best handmade macro-F1 (0.8991), while the full
+33-landmark and lower-body-only variants remained close but did not improve the
+overall macro-F1. This supports using a compact landmark representation as the
+default. For temporal resolution, the eight-frame setting achieved the best
+macro-F1 (0.8991), while 16, 24, and 32 frames did not yield a monotonic
+improvement. The eight-phase representation is therefore both effective and
+computationally economical for this dataset.
+
+\paragraph{RQ6 --- How does the image-based representation compare with the
+landmark-based representation under the autocorr pipeline?}
+Under the controlled matched-cycle comparison, the landmark representation was
+clearly more reliable. The autocorr landmark baseline reached a macro-F1 of
+0.5417, while the image-based MobileNetV2--LSTM pipeline reached only 0.1000
+macro-F1 and a ROC-AUC of 0.0592. The historical
+\texttt{autocorr\_fixed} image-based milestone with validation accuracy 76.5\%
+was not reproduced under the final fixed-split protocol. It is therefore treated
+as development evidence and motivation for the organised image-based rerun, not
+as a benchmark result.
+
+\paragraph{RQ7 --- How do cycle aggregation, threshold selection, and pose/cycle
+quality affect interpretation?}
+Each factor materially affects interpretation. Aggregating cycle-level
+predictions to the video level by majority vote improved the automatic landmark
+baseline from 0.5139 to 0.5333 macro-F1, although the video-level test set was
+small. Validation-tuned thresholds improved or preserved some clean handmade
+results but overfit several automatic-pipeline models, especially the
+CNN-BiLSTM. The quality analysis showed that higher heel visibility, lower
+missing-ratio, and stronger autocorrelation were associated with better
+classification accuracy. These findings confirm that evaluation should report
+cycle-level and video-level behaviour, state whether thresholds are tuned on
+validation, and account for pose and cycle quality.
+
+% ---------------------------------------------------------------------
+\section{Future Work}
+\label{sec:concl-future}
+
+The findings point to several future directions, ordered by their likely impact
+on the automatic pipeline.
+
+\begin{itemize}
+    \item \textbf{Larger and more diverse dataset.} The validation and test sets
+    are small, so future work should collect more in-the-wild videos across
+    more runners, camera viewpoints, running speeds, clothing conditions,
+    and recording environments.
+    
+    \item \textbf{Stronger foot-strike and cycle-boundary annotation.} Since the
+    largest performance gap comes from replacing handmade cycles with
+    automatic cycles, higher-quality foot-strike annotations should be
+    collected to train and evaluate better boundary detectors.
+    
+    \item \textbf{Improved automatic cycle detection.} The current
+    autocorrelation approach is interpretable but limited. Future work
+    should compare it with learned boundary detectors, temporal
+    segmentation models, and hybrid methods that combine periodicity,
+    foot-contact cues, and confidence-based filtering.
+    
+    \item \textbf{Pose-quality-aware filtering and weighting.} The quality
+    analysis indicates that errors concentrate in low-visibility or weakly
+    periodic cycles. Future systems should explicitly use pose visibility,
+    landmark missing-ratio, autocorrelation strength, and cycle-quality
+    scores to reject, weight, or calibrate predictions.
+    
+    \item \textbf{Expert biomechanics validation.} The correct/false labels and
+    recovered kinematic patterns should be checked against expert assessment
+    so that the classification target is better grounded in running-form
+    criteria.
+    
+    \item \textbf{More robust image-based modelling.} The controlled image rerun
+    showed that RGB crops are unstable in the current implementation.
+    Future work should improve runner tracking, bounding-box smoothing,
+    crop stabilisation, and data augmentation before drawing conclusions
+    about the value of image-based representations.
+    
+    \item \textbf{Pose--image fusion.} Rather than choosing between landmarks and
+    crops, future models could fuse a compact landmark stream with a
+    stabilised visual stream, combining the robustness of pose coordinates
+    with visual cues such as silhouette and limb contour.
+    
+    \item \textbf{Video-level decision protocol.} Since aggregation can reduce
+    cycle-level noise, future work should treat video-level prediction as a
+    first-class evaluation target, compare majority vote with probability
+    averaging and confidence voting, and report uncertainty when few cycles
+    are available.
+    
+    \item \textbf{Deployment only after validation.} A real-time coaching or
+    feedback tool is a possible long-term direction, but it should only be
+    considered after the automatic pipeline is validated on larger,
+    representative data and shown to be reliable across viewpoints and
+    runner populations.
+\end{itemize}
+
+The final conclusion is therefore deliberately conservative. This thesis shows
+that markerless pose data from in-the-wild running videos can support
+running-technique classification when cycle segmentation is reliable. It also
+shows that the current automatic system is limited mainly by upstream pose and
+cycle quality. The next stage of work should therefore prioritise robust cycle
+detection, larger validation data, and expert-labelled evaluation before moving
+toward practical deployment.
+
+% End of Chapter 7

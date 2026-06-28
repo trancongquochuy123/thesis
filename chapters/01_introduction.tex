@@ -1,0 +1,181 @@
+% =====================================================================
+% chapters/01_introduction.tex
+% Chapter 1 — Introduction
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% No empirical metrics appear here. References use citation keys from the
+% thesis bibliography.
+% =====================================================================
+
+\chapter{Introduction}
+\label{ch:introduction}
+
+% ---------------------------------------------------------------------
+\section{Background}
+\label{sec:intro-background}
+
+Running technique --- the manner in which a person coordinates posture, foot
+strike, stride, and limb motion through the running cycle --- has a direct
+bearing on athletic performance, training efficiency, and the risk of
+overuse injury \cite{novacheck1998biomechanics}. Coaches, clinicians, and runners
+therefore have a long-standing interest in assessing whether a given running
+form is sound or in need of correction. Distinguishing "correct" from "false"
+technique is, however, a subtle judgement: the diagnostic information is
+distributed across the whole kinematic chain and is expressed only as the body
+moves periodically through repeated running cycles, rather than in any single
+static posture \cite{inostroza2025runningcycle, cutting1978gaitperiodicity}.
+
+Traditional approaches to running analysis are accurate but costly to apply at
+scale. Optical marker-based motion capture provides laboratory-grade kinematics
+but requires controlled environments, calibrated multi-camera rigs, and marker
+placement; wearable inertial sensors enable field measurement but require
+body-worn instrumentation and calibration; and expert visual inspection depends
+on scarce specialist time and is inherently subjective
+\cite{panconi2024markerless, bulling2014tutorial}. None of these
+modalities can be applied retrospectively to footage that was not captured with
+them in mind.
+
+At the same time, \emph{in-the-wild} running videos --- clips recorded with
+ordinary cameras and shared on the internet --- are abundant. This footage is an
+enormous, untapped source of running data, but it is also noisy and
+uncontrolled: it varies in camera viewpoint, resolution, frame rate, lighting,
+and framing, and it carries no instrumentation or ground-truth measurement
+\cite{topham2023hpesurvey}. Recent advances in \emph{markerless pose estimation}
+make it possible to recover body landmarks directly from such ordinary RGB
+video, with per-landmark confidence values, and thereby open the possibility of
+analysing running technique from video that was never intended for biomechanical
+study \cite{topham2023hpesurvey, lugaresi2019mediapipe, bazarevsky2020blazepose}. This thesis
+investigates whether, and under what conditions, that possibility can be realised
+with deep learning.
+
+% ---------------------------------------------------------------------
+\section{Problem Statement}
+\label{sec:intro-problem}
+
+The problem addressed in this thesis is stated as follows: \emph{given an
+in-the-wild running video, classify the running technique as correct or false
+using markerless pose estimation and deep learning.} The input is an ordinary
+single-runner video with no instrumentation or calibration; the desired output
+is a binary technique label, ideally accompanied by an indication of confidence.
+The task must be solved without the controlled conditions assumed by
+marker-based or sensor-based methods, relying instead on landmarks recovered
+from the raw footage.
+
+Solving this problem in the wild raises a set of inter-related challenges:
+
+\begin{itemize}
+  \item \textbf{Camera viewpoint variation.} Clips are filmed from arbitrary and
+        inconsistent angles, so the same technique appears differently across
+        videos.
+  \item \textbf{Uncontrolled resolution and frame rate.} Spatial resolution and
+        temporal sampling (FPS) differ between clips, affecting both pose
+        quality and the temporal granularity of the running cycle.
+  \item \textbf{Pose-landmark noise.} Markerless estimates from uncontrolled
+        footage are noisier and less certain than laboratory measurements.
+  \item \textbf{Missing or unstable lower-body landmarks.} The ankle, heel, and
+        toe landmarks most diagnostic of running form are also the most
+        frequently occluded, blurred, or mislocalised.
+  \item \textbf{Foot-strike and cycle-boundary ambiguity.} The events that
+        define a running cycle are themselves hard to localise reliably from
+        noisy signals.
+  \item \textbf{Automatic cycle detection affects classification.} Because the
+        classifier operates on segmented cycles, errors in automatic cycle
+        detection propagate into the final decision, coupling the two stages.
+\end{itemize}
+
+These challenges motivate a design that separates the difficulty of
+\emph{classification} from the difficulty of automatic \emph{cycle detection},
+so that the contribution of each can be measured rather than conflated.
+
+% ---------------------------------------------------------------------
+\section{Research Questions}
+\label{sec:intro-rqs}
+
+The thesis is organised around seven research questions:
+
+\begin{description}
+  \item[RQ1.] Can pose-based classifiers distinguish correct from false running
+        technique when running cycles are manually or otherwise reliably
+        segmented?
+  \item[RQ2.] How much classification performance is lost when handmade cycles
+        are replaced by automatic autocorrelation-based cycle detection?
+  \item[RQ3.] Which motion signal is most reliable for automatic running-cycle
+        detection?
+  \item[RQ4.] Which model architecture is most suitable for classifying
+        eight-phase pose sequences?
+  \item[RQ5.] How do the feature representation and the number of frames sampled
+        per cycle affect classification performance?
+  \item[RQ6.] How does an image-based representation compare with a
+        landmark-based representation under the same automatic
+        (autocorrelation) pipeline?
+  \item[RQ7.] How do cycle-level aggregation, decision-threshold selection, and
+        pose/cycle quality affect the interpretation of the final results?
+\end{description}
+
+RQ1 establishes whether the task is solvable in principle; RQ2 quantifies the
+cost of automation; RQ3--RQ5 examine the design choices internal to the
+automatic pipeline; RQ6 addresses the representation question; and RQ7 concerns
+how results should be measured and interpreted.
+
+% ---------------------------------------------------------------------
+\section{Contributions}
+\label{sec:intro-contributions}
+
+In addressing these questions, the thesis makes the following contributions:
+
+\begin{enumerate}
+  \item A complete markerless, pose-based pipeline for classifying running
+        technique from in-the-wild internet videos, spanning pose estimation,
+        landmark filtering and normalisation, motion-signal extraction,
+        running-cycle detection, phase sampling, representation, deep-learning
+        classification, and evaluation.
+  \item A matched experimental design comprising a \emph{handmade upper bound},
+        which characterises classification given reliable segmentation, and an
+        \emph{autocorrelation-based automatic baseline}, which uses only
+        information available from the video itself; the pairing isolates the
+        effect of automatic cycle detection.
+  \item An \emph{eight-phase} running-cycle representation that normalises for
+        cadence so that cycles of differing duration become directly comparable.
+  \item A set of controlled ablation studies on model architecture, detection
+        signal, feature representation, and frames per cycle.
+  \item Extended analyses comparing landmark-based and image-based
+        representations on an identical cycle source, comparing cycle-level and
+        video-level evaluation, examining decision-threshold selection, and
+        relating pose and cycle quality to classification accuracy.
+  \item A disciplined separation between \emph{historical development} results
+        --- retained as method-evolution evidence --- and \emph{controlled
+        benchmark} results obtained under a single fixed, leakage-free protocol,
+        ensuring that development-stage milestones are not mistaken for
+        benchmarks.
+\end{enumerate}
+
+% ---------------------------------------------------------------------
+\section{Thesis Structure}
+\label{sec:intro-structure}
+
+The remainder of the thesis is organised as follows.
+Chapter~\ref{ch:literature-review} reviews the relevant literature on running
+technique, motion-analysis modalities, markerless pose estimation, running-cycle
+detection, pose- and image-based classification, and evaluation protocols, and
+identifies the research gap.
+Chapter~\ref{ch:methodology} describes the proposed framework in detail,
+including the dataset and leakage-free splitting protocol, pose estimation,
+landmark filtering and normalisation, motion-signal extraction, the three
+cycle-detection methods, eight-phase sampling, the landmark and image
+representations, the classification models, the cycle- and video-level
+prediction scheme, and threshold selection.
+Chapter~\ref{ch:experimental-setup} specifies the experimental setup, including
+training configurations, evaluation metrics, and the reporting protocol that
+separates controlled from historical results.
+Chapter~\ref{ch:results} reports the empirical results: dataset statistics, the
+handmade upper bound, the automatic baseline, the ablation studies, the
+historical version history, and the extended analyses.
+Chapter~\ref{ch:discussion} interprets these results, locating where performance
+is gained and lost across the pipeline.
+Chapter~\ref{ch:conclusion} summarises the findings, restates the answers to the
+research questions, and outlines directions for future work. Throughout, the
+scope of the conclusions is kept commensurate with the dataset and protocol
+used, and no claim of real-world deployment readiness is made.
+
+% End of Chapter 1

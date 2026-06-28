@@ -1,0 +1,242 @@
+% =====================================================================
+% appendices/appendix_a_implementation.tex
+% Appendix A — Implementation Details
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% Required preamble packages in main.tex:
+%   \usepackage{booktabs}
+%   \usepackage{array}
+%   \usepackage{tabularx}
+%   \usepackage{graphicx}
+%
+% This appendix documents implementation only. Configuration values are
+% reported only when available from the project notebooks, exported reports,
+% or experiment inventory. Missing training hyper-parameters are explicitly
+% marked as not exported rather than inferred.
+% =====================================================================
+
+\chapter{Implementation Details}
+\label{app:implementation}
+
+This appendix documents the implementation behind the experiments of
+Chapters~\ref{ch:experimental-setup}--\ref{ch:results}: the notebook
+organisation, the output directory layout, the files each stage produces, and
+the configuration settings. It is provided for reproducibility; no additional
+result claims are introduced here. Configuration values are reported only when
+they are available from the project notebooks or exported reports; values that
+were not exported are explicitly marked as unavailable rather than inferred.
+
+% ---------------------------------------------------------------------
+\section{Notebook Mapping}
+\label{app:notebook-mapping}
+
+The pipeline is implemented as a sequence of self-contained notebooks.
+Table~\ref{tab:notebook-mapping} maps each notebook to the pipeline stage it
+realises and the principal role it plays in the thesis. Notebooks numbered with
+a letter suffix (03b--03g) are extended or supplementary analyses; the others
+are core pipeline stages.
+
+\begin{table}[htbp]
+\centering
+\caption{Mapping of project notebooks to pipeline stages and thesis roles.}
+\label{tab:notebook-mapping}
+\renewcommand{\arraystretch}{1.18}
+\scriptsize
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}p{0.08\textwidth}
+>{\raggedright\arraybackslash}p{0.34\textwidth}
+>{\raggedright\arraybackslash}X
+>{\raggedright\arraybackslash}p{0.16\textwidth}}
+\toprule
+ID & Notebook & Purpose & Role \\
+\midrule
+00  & \texttt{00\_dataset\_split\_and\_eda} & Dataset construction, video-level splitting, and exploratory data analysis. & Core \\
+01  & \texttt{01\_handmade\_8frame\_upper\_bound} & Handmade eight-phase cycle pipeline used as the controlled upper-bound reference. & Core \\
+02  & \texttt{02\_autocorr\_cycle\_detection\_baseline} & Automatic autocorrelation-based landmark baseline using motion signals and detected cycles. & Core \\
+03  & \texttt{03\_handmade\_vs\_autocorr\_comparison} & Comparison between manually controlled cycle segmentation and automatic cycle detection. & Core \\
+03b & \texttt{03b\_autocorr\_image\_based\_pipeline} & Image-based autocorr pipeline using runner crops and a MobileNetV2--LSTM classifier. & Supplementary \\
+03c & \texttt{03c\_autocorr\_version\_comparison} & Autocorr version history and method-evolution summary. & Supplementary \\
+03d & \texttt{03d\_representation\_comparison\_landmark\_vs\_image} & Landmark-only versus image-based representation comparison. & Supplementary \\
+03e & \texttt{03e\_cycle\_level\_vs\_video\_level\_evaluation} & Cycle-level and video-level evaluation with aggregation. & Supplementary \\
+03f & \texttt{03f\_pose\_cycle\_quality\_analysis} & Pose-quality and cycle-quality analysis for interpreting failures. & Supplementary \\
+03g & \texttt{03g\_threshold\_05\_vs\_tuned\_report} & Comparison between default threshold 0.5 and validation-tuned threshold. & Supplementary \\
+03h & \texttt{03h\_autocorr\_cv\_robustness\_check} & Fair handmade--autocorr gap under 5-fold video-level CV and autocorr MLP permutation test. & Core support \\
+04  & \texttt{04\_model\_ablation} & Architecture ablation over MLP, 1D-CNN, BiLSTM, and CNN-BiLSTM. & Core \\
+05  & \texttt{05\_feature\_ablation} & Input feature-set comparison. & Core \\
+06  & \texttt{06\_signal\_ablation\_cycle\_detection} & Comparison of motion signals for cycle detection. & Core \\
+07  & \texttt{07\_frames\_per\_cycle\_ablation} & Comparison of 8, 16, 24, and 32 sampled frames per cycle. & Core \\
+08  & \texttt{08\_boundary\_detector\_pipeline} & Learned boundary-detection pipeline. & Supplementary \\
+09  & \texttt{09\_raw\_sequence\_bilstm\_gru} & Raw-sequence BiLSTM/GRU pipeline without fixed eight-phase sampling. & Supplementary \\
+10  & \texttt{10\_threshold\_tuning\_and\_calibration} & Threshold sweep and calibration analysis. & Supplementary \\
+11  & \texttt{11\_error\_analysis} & Error analysis used to support the discussion of failure modes. & Core support \\
+12  & \texttt{12\_final\_report\_tables\_and\_figures} & Core report tables and figures. & Core \\
+12b & \texttt{12b\_extended\_final\_report\_tables} & Extended report tables and final summary figures. & Supplementary \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------
+\section{Directory Structure}
+\label{app:directory}
+
+All notebooks write to a fixed output directory under a configurable
+\texttt{DRIVE\_BASE} root, so that downstream aggregation notebooks can locate
+artefacts regardless of where the project is mounted. The principal layout is
+shown below.
+
+\lstset{
+  breaklines=true,      % Tự động ngắt dòng khi chạm lề
+  basicstyle=\ttfamily\small, % Phông chữ máy tính nhỏ gọn gọn gàng
+  columns=flexible,
+  keepspaces=true
+}
+
+\begin{lstlisting}
+DRIVE_BASE/
+  outputs/
+    dataset/          # split lists, split_summary, metadata
+    eda/              # class/duration/fps/frame distributions, split charts
+    handmade/         # handmade results, predictions, reports, curves, *.pth
+    autocorr/         # autocorr results, cycle stats, fair-gap CV/permutation files
+    autocorr_image/   # image results, cycle stats, crops, reports, *.pth
+    ablation/         # model / feature / signal / frames ablation CSVs
+    reports/          # comparison CSVs/MD, extended summaries, figures
+    figures/          # copied thesis-ready figures
+\end{lstlisting}
+
+% ---------------------------------------------------------------------
+\section{Output Files}
+\label{app:output-files}
+
+Table~\ref{tab:output-files} lists the principal machine-readable outputs and
+the notebook that produces each. These files are the inputs to the controlled
+comparisons and ablations of Chapter~\ref{ch:results}.
+
+\begin{table}[htbp]
+\centering
+\caption{Principal output files and producing notebooks.}
+\label{tab:output-files}
+\renewcommand{\arraystretch}{1.18}
+\scriptsize
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}p{0.38\textwidth}
+>{\raggedright\arraybackslash}p{0.16\textwidth}
+>{\raggedright\arraybackslash}X}
+\toprule
+File & Producing notebook & Contents \\
+\midrule
+\texttt{dataset/split\_summary.csv} & 00 & Per-split video and cycle counts. \\
+\texttt{handmade/handmade\_results.csv} & 01 & Handmade upper-bound metrics for the landmark models. \\
+\texttt{handmade/handmade\_predictions.csv} & 01 & Per-sample predictions for the handmade upper-bound pipeline. \\
+\texttt{handmade/handmade\_classification\_report.txt} & 01 & Classification report for the handmade pipeline. \\
+\texttt{autocorr/autocorr\_results.csv} & 02 & Autocorr landmark baseline metrics. \\
+\texttt{autocorr/autocorr\_predictions.csv} & 02 & Per-sample predictions for the autocorr landmark pipeline. \\
+\texttt{autocorr/autocorr\_cycle\_stats.csv} & 02 & Per-cycle detection statistics and quality information. \\
+\texttt{autocorr/autocorr\_failed\_videos.csv} & 02 & Failed or rejected videos in the autocorr pipeline. \\
+\texttt{autocorr/fair\_gap\_and\_mlp\_perm.csv} & 03h & Fair-gap CV summary and autocorr MLP permutation-test values. \\
+\texttt{autocorr/fair\_gap\_and\_mlp\_perm.json} & 03h & Machine-readable fair-gap and permutation-test record. \\
+\texttt{reports/pipeline\_comparison.csv} & 03 & Handmade versus autocorr comparison. \\
+\texttt{autocorr\_image/image\_results.csv} & 03b & Image-based autocorr pipeline metrics. \\
+\texttt{autocorr\_image/image\_predictions.csv} & 03b & Per-sample predictions for the image-based pipeline. \\
+\texttt{autocorr\_image/image\_cycle\_stats.csv} & 03b & Cycle and crop statistics for the image pipeline. \\
+\texttt{reports/autocorr\_version\_comparison.csv} & 03c & Autocorr version history and method-evolution records. \\
+\texttt{reports/representation\_comparison.csv} & 03d & Landmark versus image representation comparison. \\
+\texttt{reports/cycle\_level\_metrics.csv} & 03e & Cycle-level evaluation metrics. \\
+\texttt{reports/video\_level\_metrics.csv} & 03e & Video-level aggregated evaluation metrics. \\
+\texttt{reports/pose\_cycle\_quality\_metrics.csv} & 03f & Quality-group metrics for pose and cycle quality analysis. \\
+\texttt{reports/threshold\_05\_vs\_tuned.csv} & 03g & Default-threshold versus tuned-threshold comparison. \\
+\texttt{ablation/model\_ablation.csv} & 04 & Architecture ablation results. \\
+\texttt{ablation/feature\_ablation.csv} & 05 & Feature-set ablation results. \\
+\texttt{ablation/signal\_ablation.csv} & 06 & Motion-signal ablation results. \\
+\texttt{ablation/frames\_ablation.csv} & 07 & Frames-per-cycle ablation results. \\
+\texttt{bd\_results.csv} & 08 & Boundary-detector pipeline results, when exported. \\
+\texttt{raw\_sequence\_results.csv} & 09 & Raw-sequence BiLSTM/GRU results, when exported. \\
+\texttt{reports/main\_pipeline\_comparison.csv} & 12b & Consolidated main pipeline summary. \\
+\texttt{reports/extended\_final\_results\_summary.csv} & 12b & Extended final summary including supplementary pipelines. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------
+
+\section{Hyperparameter Settings}
+\label{app:hyperparams}
+
+Table~\ref{tab:hyperparams} records implementation settings that could be
+verified from the project notebooks, exported reports, and the hyper-parameter
+evidence audit. The table intentionally separates settings that were verified
+from settings that were not exported. This prevents the thesis from inventing
+training details while still documenting the values that are available in the
+experiment evidence.
+
+\begin{table}[htbp]
+\centering
+\caption{Verified implementation settings and model-configuration evidence.}
+\label{tab:hyperparams}
+\renewcommand{\arraystretch}{1.15}
+\scriptsize
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}p{0.31\textwidth}
+>{\raggedright\arraybackslash}X}
+\toprule
+Setting & Verified value / status \\
+\midrule
+Pose estimator & MediaPipe BlazePose, producing 33 pose landmarks with landmark visibility. \\
+Selected landmarks & 13 landmarks: 0, 11, 12, 23, 24, 25, 26, 27, 28, 29, 30, 31, and 32. \\
+Cycle representation & Eight sampled phases per detected running cycle. \\
+Velocity augmentation & Enabled for the landmark representation where selected landmark coordinates are augmented with temporal velocity features. \\
+Main automatic cycle signal & \texttt{contact\_diff}. \\
+Autocorr cycle logic & Foot-strike-to-foot-strike cycle detection with two-stride correction. \\
+Autocorr visibility threshold & 0.45. \\
+Autocorr cycle duration bounds & $[0.50, 1.15]$ seconds for the controlled landmark baseline; the historical image-development notebook used a wider automatic-detection range before stricter cycle filtering. \\
+Autocorr fixed margin & Disabled; \texttt{USE\_MARGIN = False}. \\
+Image crop size & $224 \times 224$ RGB runner-centred crop. \\
+Image backbone & MobileNetV2 visual feature extractor with an LSTM temporal head. \\
+\midrule
+Landmark model training schedule & Verified from the audited landmark notebooks: learning rate $10^{-3}$, batch size 16, 80 epochs, weight decay $10^{-4}$, random seed 42. Optimiser and loss function were not consistently exported in the final evidence. \\
+MLP parameter count & 193{,}025 parameters. \\
+1D-CNN parameter count & 40{,}257 parameters. \\
+BiLSTM parameter count & 173{,}441 parameters. \\
+CNN-BiLSTM parameter count & 82{,}113 parameters. \\
+\midrule
+Autocorr image representation schedule & Verified from the audited \texttt{03b\_autocorr\_image\_based\_pipeline.ipynb}: learning rate $10^{-3}$, batch size 8, 40 epochs, weight decay $10^{-4}$, dropout 0.4, two recurrent layers, random seed 42. \\
+Historical \texttt{autocorr\_fixed} image-development model & Verified from the historical 76.5\% notebook: 8 RGB frames per cycle, batch size 8, MobileNetV2 ImageNet backbone, LSTM hidden size 128, two LSTM layers, dropout 0.4, LayerNorm + two-layer classification head. \\
+Historical \texttt{autocorr\_fixed} training schedule & AdamW with OneCycleLR in two phases: 15 frozen-backbone epochs with lr $3\times10^{-4}$ and weight decay $10^{-3}$, followed by 10 partial-fine-tuning epochs with lr $5\times10^{-5}$ and weight decay $10^{-4}$. The last five MobileNetV2 feature blocks were unfrozen in the fine-tuning phase. \\
+Historical \texttt{autocorr\_fixed} loss and regularisation & \texttt{BCEWithLogitsLoss} with class \texttt{pos\_weight}, gradient clipping at 1.0, validation accuracy used for checkpoint selection in the historical development notebook. \\
+MobileNetV2--LSTM parameter count & \textit{Not exported in provided reports}. \\
+\midrule
+Boundary-detector evidence & Dropout values 0.3/0.4 and two recurrent layers were found in the audit, but the full training schedule was not consistently exported; the boundary detector is therefore treated as supplementary. \\
+GRU / raw-sequence parameter count & \textit{Not exported in provided reports}. \\
+Raw-sequence training schedule & \textit{Not exported in provided reports}. \\
+Early stopping & \textit{Not exported in provided reports}. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\footnotesize
+\noindent\textit{Note.} Parameter counts for MLP, 1D-CNN, BiLSTM, and
+CNN-BiLSTM are taken from the exported model-ablation report. Landmark and image
+training schedules are reported only when they were explicitly recovered from
+the audited notebooks or the hyper-parameter evidence audit. The historical
+\texttt{autocorr\_fixed} settings describe the development image pipeline that
+produced the 76.5\% validation-accuracy milestone; they are documented as method
+evidence and should not be confused with a controlled benchmark result unless
+that pipeline is rerun under the shared train/validation/test protocol.
+\end{table}
+
+% ---------------------------------------------------------------------
+\section{Reproducibility Notes}
+\label{app:reproducibility-notes}
+
+The experiments use video-level splitting to prevent cycles extracted from the
+same source video from appearing in both training and evaluation partitions.
+The handmade pipeline should be interpreted as an upper-bound reference because
+the cycle boundaries are manually controlled. The autocorr landmark pipeline is
+the main automatic baseline because it uses automatic cycle detection and the
+fixed split used for the final thesis results. The image-based pipeline is an
+extended representation comparison and should not be conflated with historical
+image-based development notebooks unless rerun under the same fixed-split
+protocol.
+
+% End of Appendix A

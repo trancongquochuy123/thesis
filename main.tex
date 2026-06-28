@@ -1,0 +1,150 @@
+% =========================================================
+% main.tex - Academic Thesis Template (Optimized)
+% =========================================================
+\documentclass[12pt,a4paper,oneside]{report}
+
+% -------------------- Page layout --------------------
+\usepackage[
+    a4paper,
+    left=3.0cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm,
+    headheight=15pt % Tránh cảnh báo của fancyhdr nếu dùng sau này
+]{geometry}
+
+% -------------------- Encoding and language --------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{url}
+\usepackage{listings}
+% -------------------- Font and Micro-typography --------------------
+% Sử dụng New Times Roman chuẩn học thuật cho cả text và math
+\usepackage{newtxtext}
+\usepackage{newtxmath} % Đã bao gồm toán tập hợp, KHÔNG dùng chung với amssymb
+
+% Microtype: Bí quyết giúp văn bản upscale, tự động sửa lỗi tràn lề, giãn chữ cực đẹp
+\usepackage{microtype} 
+
+\usepackage{setspace}
+\onehalfspacing % Giãn dòng 1.5 chuẩn luận văn
+
+% -------------------- Paragraph formatting --------------------
+\usepackage{indentfirst} % Lùi đầu dòng ở cả đoạn đầu tiên sau tiêu đề
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+
+% -------------------- Figures & Graphics --------------------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\graphicspath{{figures/}{images/}{outputs/figures/}}
+
+% -------------------- Tables --------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage[table]{xcolor}
+\usepackage{ragged2e}
+
+
+% Cấu hình siunitx chuẩn phiên bản mới v3
+\usepackage{siunitx}
+\sisetup{
+    round-mode = places,
+    round-precision = 2,
+    detect-all
+}
+
+% Định nghĩa lại cột X của tabularx để tự động xuống dòng và căn trái đẹp mắt
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcommand{\tablefont}{\footnotesize} % Font chữ nhỏ gọn cho bảng data lớn
+
+% -------------------- Diagrams (TikZ) --------------------
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit}
+
+% Safe inline code cho tên file hoặc biến máy tính
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+
+% -------------------- Captions --------------------
+\usepackage{caption}
+\captionsetup{
+    font=small,
+    labelfont=bf,
+    labelsep=colon,
+    format=plain,
+    justification=justified,
+    singlelinecheck=true % Nếu caption chỉ có 1 dòng -> tự động căn giữa
+}
+
+% -------------------- Math --------------------
+\usepackage{amsmath}
+% \usepackage{amssymb} % ĐÃ KHÓA: Tránh xung đột với newtxmath
+\usepackage{tabularray}
+\usepackage{seqsplit} % Thư viện chuyên dụng để bẻ đôi các chuỗi ký tự siêu dài
+% -------------------- Lists --------------------
+\usepackage{enumitem}
+\setlist{nosep} % Tối ưu khoảng cách các item trong list, không bị hở quá rộng
+
+% -------------------- References and links --------------------
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref} % Cần đặt sau hyperref
+% -------------------- Bibliography --------------------
+\usepackage{csquotes} % Thêm dòng này để sửa lỗi
+\usepackage[
+    backend=biber,
+    style=ieee,         % Kiểu IEEE (1, 2, 3), đổi thành style=apa nếu thuộc khối kinh tế/xã hội
+    sorting=none
+]{biblatex}
+\addbibresource{references.bib}
+
+% Không dùng \sloppy vì làm giãn chữ rất xấu. Microtype phía trên đã giải quyết việc này.
+\emergencystretch=0.5em 
+
+% =========================================================
+% DOCUMENT BODY
+% =========================================================
+\begin{document}
+
+% -------------------- Front matter --------------------
+\pagenumbering{roman} % Đánh số trang kiểu i, ii, iii cho phần mở đầu
+
+\input{frontmatter/frontmatter}
+
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+
+\clearpage
+
+% -------------------- Chapters --------------------
+\pagenumbering{arabic} % Reset và chuyển sang đánh số trang kiểu 1, 2, 3 cho nội dung chính
+
+\input{chapters/01_introduction}
+\input{chapters/02_literature_review}
+\input{chapters/03_methodology}
+\input{chapters/04_experimental_setup}
+\input{chapters/05_results}
+\input{chapters/06_discussion}
+\input{chapters/07_conclusion}
+
+% -------------------- Appendices --------------------
+\clearpage
+\appendix % Reset bộ đếm chương sang định dạng chữ cái (Appendix A, Appendix B,...)
+\input{appendices/appendix_a_implementation}
+\input{appendices/appendix_b_additional_results}
+
+% -------------------- Bibliography --------------------
+\clearpage
+\printbibliography[heading=bibintoc] % Thêm danh mục tài liệu tham khảo vào Table of Contents
+
+\end{document}

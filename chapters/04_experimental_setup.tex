@@ -1,0 +1,355 @@
+% =====================================================================
+% chapters/04_experimental_setup.tex
+% Chapter 4 — Experimental Setup
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% Required preamble packages (declare in main.tex):
+%   \usepackage{booktabs}  \usepackage{array}  \usepackage{tabularx}
+%   \usepackage{amsmath}
+%
+% This chapter specifies the experimental protocol only. No empirical results
+% appear here; they are reported in Chapter 5. Training hyper-parameters are
+% reported only when supported by experiment evidence rather than guessed.
+% Architecture parameter counts are configuration facts and are stated where known.
+% =====================================================================
+
+\chapter{Experimental Setup}
+\label{ch:experimental-setup}
+
+This chapter specifies how the framework of Chapter~\ref{ch:methodology} is
+evaluated: the fixed dataset split and evaluation protocol, the experimental
+pipelines and their roles, the model training configuration, the evaluation
+metrics, and the design of the ablation and extended analyses. No results are
+reported here; all empirical outcomes appear in Chapter~\ref{ch:results}.
+
+% ---------------------------------------------------------------------
+\section{Dataset Split and Evaluation Protocol}
+\label{sec:setup-split}
+
+All experiments use a single \emph{fixed split by video identifier}. Each video
+is assigned to exactly one partition --- train, validation, or test --- and all
+running cycles extracted from that video inherit its partition. This guarantees
+that no cycle from a test video is ever seen during training, preventing the
+model from recognising a specific video rather than the technique and thereby
+avoiding the optimistic bias that video-level leakage would introduce
+. The split is generated once and reused unchanged by every
+pipeline and every ablation, so that all configurations are compared on
+identical videos.
+
+The validation partition is used for model selection and for decision-threshold
+tuning (Section~\ref{sec:setup-metrics} and
+Section~\ref{sec:abl-threshold}); the test partition is held out and used only
+for final reporting. The per-split counts at both the video and cycle level are
+reported with the results in Section~\ref{sec:dataset-stats}, since they
+describe the data on which the controlled benchmarks are computed.
+
+% ---------------------------------------------------------------------
+\section{Experimental Pipelines}
+\label{sec:setup-pipelines}
+
+Five pipelines are evaluated. They share every stage except cycle source and
+representation, which is what allows their differences to be attributed to those
+two factors. Table~\ref{tab:pipelines} summarises their design and role.
+
+\begin{table}[htbp]
+\centering
+\caption{Experimental pipelines, their cycle source, representation, models, and intended role. Only the first two rows constitute the main controlled comparison; the image pipeline is an extended representation comparison and the last two are supplementary.}
+\label{tab:pipelines}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize % Giữ nguyên cỡ chữ nhỏ để bảng gọn gàng
+
+% Cấu hình mới: cột 1 và 2 để 'l' (vì chữ ngắn), các cột còn lại dùng 'X' hoặc định dạng của 'X' để tự động xuống dòng.
+\begin{tabularx}{\textwidth}{l l X X X}
+\toprule
+Pipeline & Cycle source & Representation & Model(s) & Role \\
+\midrule
+Handmade landmark & Manual segmentation & Landmark $+$ velocity & MLP, 1D-CNN, BiLSTM, CNN-BiLSTM & Upper bound (not deployable) \\
+\addlinespace
+Autocorr landmark & Autocorr.\ (\texttt{contact\_diff}) & Landmark $+$ velocity & MLP, 1D-CNN, BiLSTM, CNN-BiLSTM & Main automatic baseline \\
+\addlinespace
+Autocorr image & Autocorr.\ (\texttt{contact\_diff}) & RGB crop & MobileNetV2--LSTM & Representation comparison \\
+\addlinespace
+Boundary detector & Learned BiLSTM boundaries & Landmark $+$ velocity & BiLSTM, CNN-BiLSTM & Supplementary \\
+\addlinespace
+Raw sequence & None (whole video) & Full landmark sequence & GRU, BiLSTM & Supplementary / exploratory \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Handmade Landmark Upper Bound}
+\label{sec:setup-handmade}
+
+The handmade pipeline uses manually segmented cycles and the landmark
+representation. It serves as the \emph{upper bound}: it estimates the achievable
+classification performance when cycle segmentation is reliable, isolating
+classification difficulty from automatic-detection difficulty. It is
+explicitly not a deployable baseline.
+
+\subsection{Autocorr Landmark Baseline}
+\label{sec:setup-autocorr}
+
+The autocorrelation landmark pipeline is the main \emph{automatic baseline}. It
+detects cycles from the \texttt{contact\_diff} signal using the
+autocorrelation-based detector of Section~\ref{sec:method-autocorr} and uses the
+same landmark representation and classifiers as the handmade pipeline, so that
+the two differ only in cycle source.
+
+\subsection{Autocorr Image-Based Pipeline}
+\label{sec:setup-image}
+
+The image-based pipeline reuses the \emph{identical} autocorrelation cycle
+source as the landmark baseline but represents each phase as a runner-centred
+RGB crop classified by a MobileNetV2--LSTM model
+(Section~\ref{sec:method-image-rep}). Holding the cycle source fixed makes this
+a controlled comparison of \emph{representation}, separate from any historical
+image-based development milestone.
+
+\subsection{Boundary Detector Pipeline}
+\label{sec:setup-bd}
+
+The boundary-detector pipeline replaces rule-based autocorrelation with a
+learned BiLSTM foot-strike detector (Section~\ref{sec:method-bd}); downstream
+stages are unchanged. It is reported as a supplementary pipeline.
+
+\subsection{Raw Sequence Pipeline}
+\label{sec:setup-raw}
+
+The raw-sequence pipeline omits cycle cutting entirely and classifies the whole
+video's pose sequence with a recurrent model (GRU/BiLSTM,
+Section~\ref{sec:method-gru}). Here one sample corresponds to one video, so its
+evaluation unit differs from the cycle-based pipelines; it is treated as an
+exploratory, supplementary configuration and is not part of the controlled
+cycle-level comparison.
+
+% ---------------------------------------------------------------------
+\section{Model Training Configuration}
+\label{sec:setup-training}
+
+All models are trained on the train partition, selected on the validation
+partition, and evaluated once on the test partition. The pose-sequence models
+operate on eight-phase landmark inputs (Section~\ref{sec:method-phases}). The
+image model uses eight RGB crops per detected cycle and a MobileNetV2--LSTM
+architecture \cite{sandler2018mobilenetv2, donahue2015lrcn}. Table~\ref{tab:model-config}
+reports configuration information that could be verified from the experiment
+notebooks and the hyper-parameter evidence audit. Values are reported only when
+they were explicitly found in the provided files; unsupported settings are still
+marked as not exported rather than inferred. The audited landmark-sequence
+experiments share a common training schedule of learning rate $10^{-3}$, batch
+size 16, 80 epochs, weight decay $10^{-4}$, and random seed 42. The audited
+image-based MobileNetV2--LSTM experiment uses learning rate $10^{-3}$, batch
+size 8, 40 epochs, dropout 0.4, two recurrent layers, weight decay $10^{-4}$,
+and random seed 42. Optimiser and loss-function details were not consistently
+exported for the landmark notebooks, so they are not used as comparison factors.
+
+
+\begin{table}[htbp]
+\centering
+\caption{Model configuration evidence available from the provided experiment files. Parameter counts are reported only when they are explicitly available in the exported model-ablation report. Training settings are reported only when they were explicitly found in the notebooks or hyper-parameter evidence audit.}
+\label{tab:model-config}
+\renewcommand{\arraystretch}{1.18}
+\scriptsize
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}p{0.16\textwidth}
+>{\raggedright\arraybackslash}p{0.18\textwidth}
+>{\raggedright\arraybackslash}p{0.22\textwidth}
+>{\raggedright\arraybackslash}p{0.11\textwidth}
+>{\raggedright\arraybackslash}X}
+\toprule
+Model & Pipeline use & Input representation & Parameters & Verified training settings \\
+\midrule
+MLP & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $193{,}025$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Optimiser/loss not exported consistently. \\
+\addlinespace
+1D-CNN & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $40{,}257$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Optimiser/loss not exported consistently. \\
+\addlinespace
+BiLSTM & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $173{,}441$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Number of recurrent layers is exported as two in the audited upper-bound notebook. \\
+\addlinespace
+CNN-BiLSTM & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $82{,}113$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Recurrent-layer details follow the model-ablation implementation evidence. \\
+\addlinespace
+MobileNetV2--LSTM & Autocorr image-based representation experiment & Eight-phase RGB runner crops, resized to $224\times224$ & Not exported & lr=$10^{-3}$; batch=8; epochs=40; weight decay=$10^{-4}$; dropout=0.4; recurrent layers=2; seed=42. Historical 76.5\% development code additionally used a two-phase AdamW/OneCycleLR schedule; details are listed in Appendix~\ref{app:hyperparams}. \\
+\addlinespace
+GRU / raw sequence model & Supplementary raw-sequence experiment & Video-level raw landmark sequence representation & Not exported & Not exported in the available hyper-parameter audit; treated as supplementary evidence only. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The four landmark-sequence models are retained in the main configuration table
+because their parameter counts are present in the exported model-ablation report.
+The MobileNetV2--LSTM and raw-sequence GRU rows are retained for completeness
+because they correspond to supplementary experiments described in the experiment
+inventory. The table distinguishes between verified training settings and missing
+implementation details. In particular, the image-based model has recoverable
+learning-rate, batch-size, epoch, dropout, layer-count, and seed evidence, but no
+exported parameter count. The raw-sequence model remains less fully documented
+and is therefore interpreted only as supplementary evidence.
+
+% ---------------------------------------------------------------------
+\section{Evaluation Metrics}
+\label{sec:setup-metrics}
+
+Let $\mathrm{TP}$, $\mathrm{FP}$, $\mathrm{FN}$, and $\mathrm{TN}$ denote the
+counts of true positives, false positives, false negatives, and true negatives
+for a given class. The following metrics are used.
+
+\emph{Accuracy} is the fraction of correctly classified samples:
+\begin{equation}
+\mathrm{Accuracy} =
+\frac{\mathrm{TP} + \mathrm{TN}}{\mathrm{TP} + \mathrm{TN} + \mathrm{FP} + \mathrm{FN}}.
+\end{equation}
+
+\emph{Precision} and \emph{recall} for a class are
+\begin{equation}
+\mathrm{Precision} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FP}},
+\qquad
+\mathrm{Recall} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FN}},
+\end{equation}
+measuring, respectively, the proportion of positive predictions that are correct
+and the proportion of actual positives that are recovered.
+
+The \emph{F1 score} is their harmonic mean:
+\begin{equation}
+\mathrm{F1} =
+2 \cdot \frac{\mathrm{Precision} \cdot \mathrm{Recall}}
+{\mathrm{Precision} + \mathrm{Recall}}.
+\end{equation}
+
+The \emph{macro-averaged F1} (macro-F1) is the unweighted mean of the per-class
+F1 scores over the two classes (correct, false):
+\begin{equation}
+\mathrm{macro\text{-}F1} =
+\frac{1}{2}\left(\mathrm{F1}_{\text{correct}} + \mathrm{F1}_{\text{false}}\right).
+\end{equation}
+
+\emph{ROC-AUC} is the area under the receiver-operating-characteristic curve,
+which plots the true-positive rate against the false-positive rate as the
+decision threshold varies; it summarises ranking quality independently of any
+single threshold, with $0.5$ corresponding to chance \cite{fawcett2006roc}.
+
+\paragraph{Why macro-F1 is the primary metric.}
+Because the dataset is class-imbalanced at the video level (more false than
+correct videos, Section~\ref{sec:dataset-stats}), accuracy can be misleading: a
+classifier that favours the majority class can attain deceptively high accuracy
+while failing on the minority class. Macro-F1 weights both classes equally
+regardless of their frequency, so a model must perform well on \emph{both}
+correct and false technique to score well \cite{sokolova2009metrics}. Macro-F1 is
+therefore reported as the primary metric throughout, with accuracy, per-class
+F1, and ROC-AUC reported alongside it for completeness. ROC-AUC is particularly
+useful for separating ranking quality from threshold choice, which is examined
+explicitly in Section~\ref{sec:abl-threshold}.
+
+% ---------------------------------------------------------------------
+\section{Ablation Study Design}
+\label{sec:setup-ablations}
+
+The ablations and extended analyses each vary one factor while holding the
+remainder of the pipeline fixed, so that the measured effect can be attributed
+to that factor. Table~\ref{tab:ablations} summarises the design; the
+corresponding results appear in Chapter~\ref{ch:results}.
+
+\begin{table}[htbp]
+\centering
+\caption{Design of the ablation studies and extended analyses. Each study varies
+one factor on a fixed pipeline and split.}
+\label{tab:ablations}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabularx}{\textwidth}{l X l X}
+\toprule
+Study & Varied factor & Pipeline & Held fixed \\
+\midrule
+Model ablation & Classifier (MLP / 1D-CNN / BiLSTM / CNN-BiLSTM) & Handmade \& Autocorr & Data, split, representation, threshold \\
+Feature ablation & Feature set (selected, full-33, $+$velocity, $+$AP/V, $+$contact, $+$all) & Handmade & Model, split, frames \\
+Signal ablation & Detection signal (head-Y, hip-Y, heel-Y, toe-Y, \texttt{contact\_diff}, \texttt{AP\_diff}, \texttt{V\_diff}) & Autocorr & Model, split, representation \\
+Frames-per-cycle & Frames sampled per cycle (8 / 16 / 24 / 32) & Handmade & Model family, split, representation \\
+Representation & Landmark vs.\ image & Autocorr (shared cycle source) & Cycle source, split \\
+Cycle vs.\ video & Evaluation unit (cycle vs.\ video aggregation) & Autocorr (and others) & Model, split \\
+Threshold & Decision threshold ($0.5$ vs.\ validation-tuned) & All & Model, split \\
+Pose/cycle quality & Quality factor (visibility, autocorr., missing-ratio, duration, period) & Autocorr & Model, split \\
+Fair-gap robustness & Cycle source under repeated folds and label permutations & Handmade vs.\ autocorr & MLP, video-level CV, threshold $0.5$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Model Ablation}
+\label{sec:abl-model}
+The four classifiers are compared on identical data for both the handmade and
+autocorr pipelines, holding the representation, split, and decision threshold
+fixed, to isolate the effect of architecture.
+
+\subsection{Feature Ablation}
+\label{sec:abl-feature}
+On the handmade pipeline, the input feature set is varied --- from the compact
+selected-landmark set through the full landmark set and several
+derived-feature augmentations --- with the classifier and all other stages held
+fixed, to measure the effect of feature representation.
+
+\subsection{Signal Ablation}
+\label{sec:abl-signal}
+On the autocorr pipeline, the one-dimensional motion signal driving cycle
+detection is varied across the seven candidates of
+Table~\ref{tab:signals}, holding the classifier fixed. Both detection
+statistics (coverage, period regularity, rejections) and downstream
+classification are recorded, since signal choice affects both.
+
+\subsection{Frames-per-Cycle Ablation}
+\label{sec:abl-frames}
+On the handmade pipeline, the number of frames sampled per cycle is varied
+(8/16/24/32) for the sequence models, holding all else fixed, to test whether
+temporal resolution beyond eight phases improves classification and at what
+computational cost.
+
+\subsection{Representation Ablation}
+\label{sec:abl-representation}
+The landmark and image representations are compared on the \emph{same}
+autocorrelation cycle source and split, so that any difference is attributable
+to representation rather than to cycle source or protocol. This analysis is kept
+separate from the historical image-based development milestone, which was
+recorded under a different protocol and is not a controlled benchmark.
+
+\subsection{Cycle-Level versus Video-Level Evaluation}
+\label{sec:abl-cycle-video}
+Predictions are evaluated both per cycle and aggregated per video (majority
+vote, mean probability, confidence-weighted vote), holding the model and split
+fixed, to assess how aggregation affects measured performance. Video-level
+results are treated as the more faithful estimate of practical performance.
+
+\subsection{Threshold 0.5 versus Tuned Threshold}
+\label{sec:abl-threshold}
+For each model, performance at the default $0.5$ threshold is compared with
+performance at a threshold selected on the \emph{validation} set (by maximising
+validation macro-F1) and applied unchanged to test. Reporting both, together
+with the change between them, exposes any threshold overfitting rather than
+concealing it.
+
+\subsection{Pose and Cycle Quality Analysis}
+\label{sec:abl-quality}
+Test cycles from the autocorr pipeline are grouped by pose- and cycle-quality
+factors --- landmark visibility, autocorrelation strength, landmark
+missing-ratio, cycle duration, and cycle period --- and classification
+performance is compared across groups, to locate the dominant source of error in
+the automatic pipeline. Because no canonical quality thresholds exist, groups are
+formed by a median split, and the resulting group sizes are reported with the
+results so that small groups are interpreted cautiously
+(Section~\ref{sec:quality}).
+
+\subsection{Fair Gap Robustness Check and Permutation Test}
+\label{sec:abl-fair-gap}
+
+The fixed split gives the primary controlled benchmark. Because the validation
+and test partitions are small, an additional robustness check is used to test
+whether the handmade--autocorr gap is specific to that split. Both cycle sources
+are evaluated with the same MLP classifier, 5-fold video-level cross-validation,
+the default threshold of $0.5$, and macro-F1 as the main metric. Splitting is
+again performed by video identifier, so all cycles from one video remain within
+the same fold.
+
+A permutation test is also applied to the autocorr MLP setting. The observed
+cross-validation macro-F1 is compared with a null distribution obtained by
+randomly permuting the labels and rerunning the same cross-validation procedure.
+The test is used as a diagnostic of separability under a simple classifier, not
+as a replacement for the controlled benchmark. A non-significant result is
+therefore interpreted conservatively: it indicates that the autocorr-derived
+features are not robustly separable under that MLP configuration, rather than
+proving that no useful signal exists.
+
+% End of Chapter 4

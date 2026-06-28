@@ -1,0 +1,291 @@
+% =====================================================================
+% chapters/02_literature_review.tex
+% Chapter 2 — Literature Review
+% Project: Vision-Based Running Technique Classification from In-the-Wild
+%          Internet Videos using Markerless Pose Estimation and Deep Learning
+%
+% Required preamble packages (declare in main.tex):
+%   \usepackage{booktabs}  \usepackage{array}  \usepackage{tabularx}
+%
+% Citation keys are drawn from references.bib and from the verified papers in
+% the project literature folder. No empirical results appear here.
+% =====================================================================
+
+\chapter{Literature Review}
+\label{ch:literature-review}
+
+This chapter reviews the research relevant to vision-based running-technique
+classification. It proceeds from the biomechanics of running form, through the
+sensing modalities used to measure it, to the pose-estimation, cycle-detection,
+and classification methods on which an automatic pipeline can be built. It then
+examines how multi-cycle video data should be evaluated, and closes by stating
+the research gap that this thesis addresses.
+
+% ---------------------------------------------------------------------
+\section{Running Technique Analysis}
+\label{sec:lit-running}
+
+Running technique, or running form, is commonly characterised by a small set of
+inter-related kinematic descriptors: the manner of \emph{foot strike} (rearfoot,
+midfoot, or forefoot contact), trunk and pelvis \emph{posture}, \emph{stride}
+parameters such as step length and cadence, and the \emph{coordination} of the
+upper and lower limbs through the gait cycle
+\cite{novacheck1998biomechanics, inostroza2025runningcycle}. These
+descriptors are not independent; for example, an over-strided rearfoot contact
+typically coincides with a more extended knee at touchdown and altered trunk
+lean, so that "correct" and "incorrect" technique are better understood as
+configurations of the whole kinematic chain than as single isolated events
+\cite{dicharry2010kinematics}.
+
+A recurring theme in the running-biomechanics literature is that technique is
+expressed \emph{periodically}: the discriminative information lives in how the
+body moves through repeated running cycles rather than in any single static
+frame \cite{inostroza2025runningcycle, cutting1978gaitperiodicity}. This has two
+consequences for an automatic system. First, the unit of analysis should be a
+running cycle, not an arbitrary frame window. Second, the descriptors most
+diagnostic of form --- foot contact, knee and ankle behaviour at touchdown, limb
+swing --- are concentrated in the lower body, which motivates particular
+attention to lower-limb measurement (Section~\ref{sec:lit-pose}).
+
+% ---------------------------------------------------------------------
+\section{Marker-Based and Markerless Motion Analysis}
+\label{sec:lit-modalities}
+
+Three broad modalities are used to capture running kinematics:
+optical \emph{marker-based} motion capture, \emph{wearable} inertial sensors,
+and \emph{markerless} video-based pose estimation. Marker-based systems track
+reflective markers with calibrated multi-camera rigs and are widely regarded as
+the laboratory reference for kinematic accuracy, but they require controlled
+environments, specialist hardware, and marker placement, which makes them
+unsuitable for analysing the large volumes of uncontrolled footage found online
+\cite{panconi2024markerless}. Wearable inertial measurement units estimate
+segment motion from accelerometers and gyroscopes; they are portable and usable
+outdoors, but require body-worn instrumentation, calibration, and drift
+correction, and are likewise absent from existing internet video
+\cite{fiaz2026gaitphase, bulling2014tutorial}.
+
+Markerless video-based analysis estimates body configuration directly from
+ordinary RGB video using learned pose-estimation models. It requires no
+instrumentation and can in principle be applied to any recording, which is what
+makes it the only viable modality for \emph{in-the-wild} internet video. The
+trade-off is reduced and less certain measurement: estimates are noisier,
+subject to occlusion and viewpoint variation, and accompanied only by
+model-internal confidence rather than physical calibration
+\cite{lugaresi2019mediapipe, bazarevsky2020blazepose, topham2023hpesurvey}.
+Table~\ref{tab:modalities} summarises the comparison that motivates the
+markerless choice in this thesis.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of motion-analysis modalities for running-technique
+measurement.}
+\label{tab:modalities}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{l X X X}
+\toprule
+Property & Marker-based & Wearable sensors & Markerless video \\
+\midrule
+Instrumentation & Markers $+$ multi-camera rig & Body-worn IMUs & None (RGB video only) \\
+Environment & Controlled lab & Field-capable & Any, incl.\ in-the-wild \\
+Kinematic accuracy & Reference standard & High, drift-prone & Lower, noisier \\
+Setup / calibration & High & Moderate & None \\
+Applicable to internet video & No & No & Yes \\
+Uncertainty signal & Physical calibration & Sensor model & Per-landmark confidence \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The implication is direct: only markerless video can be applied retrospectively
+to uncontrolled internet footage, so an in-the-wild system must accept the
+attendant measurement noise and design around it rather than assume
+laboratory-grade input.
+
+% ---------------------------------------------------------------------
+\section{Human Pose Estimation for Movement Understanding}
+\label{sec:lit-pose}
+
+Modern markerless pipelines rely on human pose estimators that localise a fixed
+set of anatomical \emph{landmarks} (joints) per frame. For single-person,
+monocular video, lightweight estimators produce \emph{2D landmarks} --- image
+coordinates for each joint --- typically accompanied by a \emph{visibility} or
+\emph{confidence} value that reflects the model's certainty that the joint is
+present and correctly located
+\cite{cao2019openpose, lugaresi2019mediapipe, bazarevsky2020blazepose}. This
+per-landmark confidence is central to any downstream use: it allows low-quality
+detections to be filtered or down-weighted, and it provides a measurable proxy
+for input quality that can later be related to classification performance.
+
+For running-technique analysis the \emph{lower-body} landmarks --- hips, knees,
+ankles, heels, and toes --- are the most informative, because foot strike, knee
+behaviour at touchdown, and ankle motion are precisely the descriptors that
+distinguish good from poor form (Section~\ref{sec:lit-running})
+\cite{novacheck1998biomechanics}. Unfortunately, these same landmarks are also
+the least \emph{stable}. The feet and ankles are small, fast-moving, frequently
+occluded by the opposite leg or by motion blur, and often near the image
+boundary; their estimated positions therefore carry more noise and lower
+confidence than torso landmarks
+\cite{topham2023hpesurvey, panconi2024markerless}. This tension --- the most
+diagnostic joints being the least reliably estimated --- is a defining challenge
+of markerless running analysis and recurs throughout this thesis, both in the
+choice of motion signals (Section~\ref{sec:lit-cycle}) and in the analysis of
+error sources.
+
+% ---------------------------------------------------------------------
+\section{Running Cycle and Gait Phase Detection}
+\label{sec:lit-cycle}
+
+Because running is periodic, a natural pre-processing step is to segment the
+continuous pose sequence into individual running cycles, conventionally bounded
+by successive \emph{foot-strike} events of the same foot
+(foot-strike-to-foot-strike) \cite{inostroza2025runningcycle, ghoussayni2004gait}.
+Reliable cycle boundaries are a prerequisite for any phase-aligned
+representation: if cycles are mis-bounded, samples drawn from "the same phase"
+across different cycles will in fact correspond to different moments of the gait,
+undermining comparison.
+
+Two families of method are used to find these boundaries. \emph{Event-based}
+methods detect foot-strike directly from a chosen motion signal, for instance by
+locating peaks or valleys in a vertical-displacement or foot-contact proxy
+signal \cite{ghoussayni2004gait, zhang2025heelstrike}. \emph{Periodicity-based}
+methods first estimate the dominant period of the motion --- classically via
+\emph{autocorrelation} of a one-dimensional signal --- and then use that period
+to constrain or validate candidate boundaries, which makes detection more robust
+to isolated spurious peaks \cite{cutting1978gaitperiodicity}. A practical
+pipeline often combines the two: an autocorrelation estimate provides the
+expected cycle length, and peak/valley detection on a foot-contact signal
+supplies the actual boundaries, with the period acting as a consistency check.
+
+The choice of signal interacts strongly with stability
+(Section~\ref{sec:lit-pose}). Signals derived from torso or hip vertical motion
+are smooth and easy to detect but only indirectly related to foot strike, while
+signals derived from the noisy foot and heel landmarks are more directly tied to
+contact events but more prone to error \cite{zhang2025heelstrike}. Selecting a
+signal is therefore a trade-off between detection coverage and boundary
+precision, a trade-off this thesis examines explicitly.
+
+% ---------------------------------------------------------------------
+\section{Pose-Based Action Classification}
+\label{sec:lit-pose-class}
+
+Once cycles are segmented and sampled, the resulting landmark sequences can be
+classified by a range of neural architectures, ordered roughly by how much
+temporal structure they model \cite{yan2018stgcn, jangua2021gait2dposes}. A
+\emph{multilayer perceptron} (MLP) treats the flattened sequence as a
+fixed-length vector and learns a static mapping; it is fast and low-variance but
+ignores temporal ordering, which can be adequate when inputs are short and
+well-aligned. A \emph{one-dimensional convolutional neural network} (1D-CNN)
+applies temporal convolutions across the sequence, capturing local motion
+patterns with relatively few parameters \cite{ordonez2016deephar}.
+
+Recurrent models capture longer-range temporal dependencies. A
+\emph{bidirectional long short-term memory} network (BiLSTM) processes the
+sequence in both directions, allowing each phase to be interpreted in the
+context of the whole cycle \cite{hochreiter1997lstm, schuster1997bidirectional}.
+A \emph{CNN-BiLSTM} hybrid first extracts local features with convolutions and
+then models their temporal evolution with a BiLSTM, combining local pattern
+extraction with sequence modelling \cite{donahue2015lrcn}. More expressive
+recurrent and hybrid models can represent richer dynamics, but on small or noisy
+datasets their additional capacity also increases the risk of overfitting --- a
+consideration that is especially relevant when the input cycles are themselves
+imperfectly segmented.
+
+% ---------------------------------------------------------------------
+\section{Image-Based Video Classification}
+\label{sec:lit-image}
+
+An alternative to landmark sequences is to classify the \emph{appearance} of the
+runner directly. Here each sampled phase is represented as an RGB crop centred
+on the runner, and a convolutional backbone extracts visual features that a
+temporal model then aggregates over the cycle. A widely used efficient design
+pairs a lightweight pretrained convolutional backbone such as
+\emph{MobileNetV2} with a recurrent temporal head such as an LSTM
+(a MobileNetV2--LSTM model): the backbone encodes each frame into a feature
+vector, and the LSTM models the sequence of per-frame features to produce a
+cycle-level prediction \cite{sandler2018mobilenetv2, donahue2015lrcn}.
+
+The appeal of image-based representations is that RGB crops retain information
+absent from sparse landmarks --- body silhouette, limb contour, clothing-relative
+motion, and surrounding visual context --- which could in principle aid
+classification \cite{topham2023hpesurvey}. The cost is a substantially larger and
+higher-variance input. Image pipelines must learn to ignore appearance variation
+(background, clothing, lighting) that landmarks discard by construction, which
+typically demands more training data; they are also sensitive to the stability
+of the runner-centred crop, which itself depends on the same noisy pose estimates
+discussed in Section~\ref{sec:lit-pose}.
+Table~\ref{tab:representations} contrasts the two representation families.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of landmark-based and image-based cycle representations.}
+\label{tab:representations}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+Property & Landmark-based & Image-based (RGB crop) \\
+\midrule
+Input per phase & Joint coordinates ($+$ confidence) & RGB crop (e.g.\ $224\times224$) \\
+Dimensionality & Low & High \\
+Information retained & Joint geometry only & Silhouette, contour, context \\
+Invariance & Appearance-invariant by design & Must be learned \\
+Typical model & MLP / CNN / BiLSTM / CNN-BiLSTM & CNN backbone $+$ temporal head \\
+Data requirement & Lower & Higher \\
+Main vulnerability & Pose-estimation noise & Crop instability, overfitting \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ---------------------------------------------------------------------
+\section{Evaluation Protocols for Multi-Cycle Video Data}
+\label{sec:lit-eval}
+
+A subtlety specific to cycle-based video analysis is the choice of evaluation
+unit. Because one video can yield several cycles, predictions may be scored at
+the \emph{cycle level} --- treating each detected cycle as an independent sample
+--- or at the \emph{video level} --- aggregating a video's cycles into a single
+prediction by, for example, majority vote, mean probability, or
+confidence-weighted vote \cite{singh2018gaitsurvey}. The two views answer
+different questions: cycle-level metrics characterise per-cycle discriminability,
+whereas video-level metrics estimate the performance a user would experience,
+since the practical unit of interest is the video.
+
+Two methodological hazards accompany this choice. First, if cycles from the same
+video are allowed to appear in both training and test sets, the evaluation leaks
+video-specific information and inflates scores; splitting strictly \emph{by
+video} is therefore essential. Second, comparisons across
+pipelines are only fair when the evaluation unit and protocol are held fixed; a
+model evaluated on whole-video sequences is not directly comparable to one
+evaluated per cycle. Sound practice is to report the split protocol explicitly,
+to fix the evaluation unit within any comparison, and to state whether a tuned
+decision threshold was used and how it was selected.
+
+% ---------------------------------------------------------------------
+\section{Research Gap}
+\label{sec:lit-gap}
+
+The reviewed literature establishes that running technique is a periodic,
+lower-body-dominated phenomenon (Section~\ref{sec:lit-running}); that only
+markerless video can be applied to in-the-wild footage, at the price of noisy
+estimates (Section~\ref{sec:lit-modalities}); that the most diagnostic landmarks
+are also the least stable (Section~\ref{sec:lit-pose}); and that cycle detection,
+representation, and classification each offer well-studied options
+(Sections~\ref{sec:lit-cycle}--\ref{sec:lit-image}). What remains
+under-addressed is their combination on \emph{uncontrolled internet video} under
+a rigorous, leakage-free evaluation.
+
+Specifically, three gaps motivate this thesis. First, prior work seldom
+\emph{separates} the contribution of automatic cycle detection from that of the
+classifier; without a controlled upper bound, it is unclear whether failures
+stem from segmentation or from learning. Second, landmark-based and image-based
+representations are rarely compared on an \emph{identical} automatic cycle source
+under a fixed split, so apparent representation advantages may merely reflect
+protocol differences --- and historical, differently-evaluated milestones risk
+being mistaken for controlled benchmarks. Third, the interaction between
+pose/cycle quality and classification accuracy on in-the-wild data is rarely
+quantified, leaving the dominant error source unidentified. This thesis addresses
+these gaps with a matched handmade-upper-bound versus automatic-baseline design,
+a controlled landmark-versus-image comparison on a shared cycle source, and an
+explicit analysis of cycle-level versus video-level evaluation, threshold
+selection, and pose/cycle quality
+(Chapters~\ref{ch:methodology}--\ref{ch:discussion}).
+
+% End of Chapter 2
