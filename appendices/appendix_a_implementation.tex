@@ -51,27 +51,27 @@ are core pipeline stages.
 \toprule
 ID & Notebook & Purpose & Role \\
 \midrule
-00  & \texttt{00\_dataset\_split\_and\_eda} & Dataset construction, video-level splitting, and exploratory data analysis. & Core \\
-01  & \texttt{01\_handmade\_8frame\_upper\_bound} & Handmade eight-phase cycle pipeline used as the controlled upper-bound reference. & Core \\
-02  & \texttt{02\_autocorr\_cycle\_detection\_baseline} & Automatic autocorrelation-based landmark baseline using motion signals and detected cycles. & Core \\
-03  & \texttt{03\_handmade\_vs\_autocorr\_comparison} & Comparison between manually controlled cycle segmentation and automatic cycle detection. & Core \\
-03b & \texttt{03b\_autocorr\_image\_based\_pipeline} & Image-based autocorr pipeline using runner crops and a MobileNetV2--LSTM classifier. & Supplementary \\
-03c & \texttt{03c\_autocorr\_version\_comparison} & Autocorr version history and method-evolution summary. & Supplementary \\
-03d & \texttt{03d\_representation\_comparison\_landmark\_vs\_image} & Landmark-only versus image-based representation comparison. & Supplementary \\
-03e & \texttt{03e\_cycle\_level\_vs\_video\_level\_evaluation} & Cycle-level and video-level evaluation with aggregation. & Supplementary \\
-03f & \texttt{03f\_pose\_cycle\_quality\_analysis} & Pose-quality and cycle-quality analysis for interpreting failures. & Supplementary \\
-03g & \texttt{03g\_threshold\_05\_vs\_tuned\_report} & Comparison between default threshold 0.5 and validation-tuned threshold. & Supplementary \\
-03h & \texttt{03h\_autocorr\_cv\_robustness\_check} & Fair handmade--autocorr gap under 5-fold video-level CV and autocorr MLP permutation test. & Core support \\
-04  & \texttt{04\_model\_ablation} & Architecture ablation over MLP, 1D-CNN, BiLSTM, and CNN-BiLSTM. & Core \\
-05  & \texttt{05\_feature\_ablation} & Input feature-set comparison. & Core \\
-06  & \texttt{06\_signal\_ablation\_cycle\_detection} & Comparison of motion signals for cycle detection. & Core \\
-07  & \texttt{07\_frames\_per\_cycle\_ablation} & Comparison of 8, 16, 24, and 32 sampled frames per cycle. & Core \\
-08  & \texttt{08\_boundary\_detector\_pipeline} & Learned boundary-detection pipeline. & Supplementary \\
-09  & \texttt{09\_raw\_sequence\_bilstm\_gru} & Raw-sequence BiLSTM/GRU pipeline without fixed eight-phase sampling. & Supplementary \\
-10  & \texttt{10\_threshold\_tuning\_and\_calibration} & Threshold sweep and calibration analysis. & Supplementary \\
-11  & \texttt{11\_error\_analysis} & Error analysis used to support the discussion of failure modes. & Core support \\
-12  & \texttt{12\_final\_report\_tables\_and\_figures} & Core report tables and figures. & Core \\
-12b & \texttt{12b\_extended\_final\_report\_tables} & Extended report tables and final summary figures. & Supplementary \\
+00  & \path{00_dataset_split_and_eda} & Dataset construction, video-level splitting, and exploratory data analysis. & Core \\
+01  & \path{01_handmade_8frame_upper_bound} & Handmade eight-phase cycle pipeline used as the controlled upper-bound reference. & Core \\
+02  & \path{02_autocorr_cycle_detection_baseline} & Automatic autocorrelation-based landmark baseline using motion signals and detected cycles. & Core \\
+03  & \path{03_handmade_vs_autocorr_comparison} & Comparison between manually controlled cycle segmentation and automatic cycle detection. & Core \\
+03b & \path{03b_autocorr_image_based_pipeline} & Image-based autocorr pipeline using runner crops and a MobileNetV2--LSTM classifier. & Supplementary \\
+03c & \path{03c_autocorr_version_comparison} & Autocorr version history and method-evolution summary. & Supplementary \\
+03d & \path{03d_representation_comparison_landmark_vs_image} & Landmark-only versus image-based representation comparison. & Supplementary \\
+03e & \path{03e_cycle_level_vs_video_level_evaluation} & Cycle-level and video-level evaluation with aggregation. & Supplementary \\
+03f & \path{03f_pose_cycle_quality_analysis} & Pose-quality and cycle-quality analysis for interpreting failures. & Supplementary \\
+03g & \path{03g_threshold_05_vs_tuned_report} & Comparison between default threshold 0.5 and validation-tuned threshold. & Supplementary \\
+03h & \path{03h_autocorr_cv_robustness_check} & Fair handmade--autocorr gap under 5-fold video-level CV and autocorr MLP permutation test. & Core support \\
+04  & \path{04_model_ablation} & Architecture ablation over MLP, 1D-CNN, BiLSTM, and CNN-BiLSTM. & Core \\
+05  & \path{05_feature_ablation} & Input feature-set comparison. & Core \\
+06  & \path{06_signal_ablation_cycle_detection} & Comparison of motion signals for cycle detection. & Core \\
+07  & \path{07_frames_per_cycle_ablation} & Comparison of 8, 16, 24, and 32 sampled frames per cycle. & Core \\
+08  & \path{08_boundary_detector_pipeline} & Learned boundary-detection pipeline. & Supplementary \\
+09  & \path{09_raw_sequence_bilstm_gru} & Raw-sequence BiLSTM/GRU pipeline without fixed eight-phase sampling. & Supplementary \\
+10  & \path{10_threshold_tuning_and_calibration} & Threshold sweep and calibration analysis. & Supplementary \\
+11  & \path{11_error_analysis} & Error analysis used to support the discussion of failure modes. & Core support \\
+12  & \path{12_final_report_tables_and_figures} & Core report tables and figures. & Core \\
+12b & \path{12b_extended_final_report_tables} & Extended report tables and final summary figures. & Supplementary \\
 \bottomrule
 \end{tabularx}
 \end{table}

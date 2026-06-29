@@ -138,15 +138,6 @@ indicates that the limiting factor in the automatic pipeline is not classifier
 capacity but the quality and consistency of the automatically segmented
 cycles. The contrast with Section~\ref{sec:handmade} is quantified directly in Section~\ref{sec:hm-vs-ac}.
 
-\IfFileExists{figures/autocorr_confusion_matrix.png}{%
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.65\textwidth]{figures/autocorr_confusion_matrix.png}
-\caption[Confusion matrix for autocorr-based landmark pipeline on test split.]{Confusion matrix for the autocorrelation-based landmark pipeline on the controlled test split.}
-\label{fig:autocorr-confusion-matrix}
-\end{figure}
-}{}
-
 % ---------------------------------------------------------------------
 \section{Handmade versus Autocorr Comparison}
 \label{sec:hm-vs-ac}
@@ -512,15 +503,6 @@ instability, domain shift, and overfitting of a high-capacity visual backbone \c
 This indicates that the current image-based implementation
 is not yet stable enough to replace the landmark baseline, not that image-based
 modelling is invalid in principle.
-
-\IfFileExists{figures/image_confusion_matrix.png}{%
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.65\textwidth]{figures/image_confusion_matrix.png}
-\caption[Confusion matrix for the image-based pipeline.]{Confusion matrix for the image-based pipeline on the controlled test split.}
-\label{fig:image-confusion-matrix}
-\end{figure}
-}{}
 
 % ---------------------------------------------------------------------
 \section{Landmark-Based versus Image-Based Representation}
