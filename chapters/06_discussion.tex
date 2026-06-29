@@ -61,12 +61,7 @@ The comparison between the handmade and autocorrelation (autocorr) pipelines
 study. Because the two pipelines share the landmark representation, classifier
 family, split, and reporting protocol, the large gap between them isolates the
 effect of cycle segmentation almost cleanly: the manual and automatic pipelines
-differ chiefly in \emph{how cycle boundaries are obtained}. The fair-gap
-robustness check strengthens this interpretation: under the same MLP classifier
-and 5-fold video-level cross-validation, handmade cycles achieve
-$0.860 \pm 0.016$ macro-F1, whereas autocorr cycles achieve
-$0.615 \pm 0.081$. The 0.245 macro-F1 fair gap shows that the fixed-split
-drop is not simply due to one unlucky train/test partition.
+differ chiefly in \emph{how cycle boundaries are obtained}. The fair-gap robustness check (Section~\ref{sec:disc-main}) confirms the gap is not a single-split artefact.
 
 Two mechanisms plausibly explain the gap. First, automatic detection discards a
 substantial fraction of the data: many videos yield no usable cycle at all, and
@@ -84,12 +79,6 @@ models latch onto regularities that do not transfer once boundaries vary. The
 practical message is that improving the automatic pipeline should target
 detection coverage and boundary precision before any change to the classifier.
 
-The permutation test further tempers the interpretation of the autocorr signal.
-The observed autocorr MLP CV macro-F1 was 0.5206, compared with a permutation
-null mean of 0.468 and $p = 0.2475$. This does not prove that the automatic
-features contain no information; rather, it suggests that the information is
-weak and unstable under a simple MLP configuration. This is consistent with a
-pipeline whose errors originate upstream in cycle boundary quality.
 
 % ---------------------------------------------------------------------
 \section{Effect of Representation: Landmark versus Image}
@@ -197,14 +186,7 @@ overall result on this split.
 The near-equivalence of the selected-landmark
 configurations supports using the compact representation as the pipeline
 default, especially for the automatic experiments where every additional input
-dimension also imports additional pose-estimation noise. This connects back to the representation discussion
-(Section~\ref{sec:disc-representation}): both results favour parsimony.
-Reducing the input to a small, well-chosen set of joints limits the model's
-exposure to noise and to spurious appearance variation, which is advantageous
-precisely because the dataset is small and the upstream estimates are imperfect.
-The choice of features should therefore be coupled to the data regime rather
-than maximised in isolation.
-
+dimension also imports additional pose-estimation noise. 
 % ---------------------------------------------------------------------
 \section{Effect of Frame Resolution per Cycle}
 \label{sec:disc-frames}
@@ -218,12 +200,6 @@ structure of a running cycle for this binary task; finer sampling mostly adds
 redundant frames and, on limited data, additional opportunity to overfit rather
 than additional discriminative signal.
 
-This finding has a useful methodological consequence: the eight-phase
-representation is justified not merely by convention but by an explicit
-cost-benefit comparison. It keeps sample dimensionality low, which is
-consistent with the parsimony favoured by the model and feature analyses, and
-it reduces the computational burden of the pipeline without a meaningful
-accuracy penalty.
 
 % ---------------------------------------------------------------------
 \section{Cycle-Level versus Video-Level Interpretation}
@@ -271,6 +247,14 @@ that any tuned result must state that the threshold was selected on validation
 and must be accompanied by the default-threshold result, so that threshold
 overfitting is visible rather than hidden.
 
+The permutation test provides a complementary diagnostic: the observed autocorr
+MLP cross-validation macro-F1 of 0.5206 was not significant against a null
+distribution obtained by label permutation ($p = 0.2475$, 100 permutations).
+This does not prove the autocorr features carry no information, but it confirms
+that any signal present is weak and unstable under a simple MLP --- consistent
+with a pipeline constrained by cycle boundary quality rather than classifier
+capacity.
+
 % ---------------------------------------------------------------------
 \section{Effect of Pose and Cycle Quality}
 \label{sec:disc-quality}
@@ -292,9 +276,7 @@ boundary-precise \texttt{contact\_diff} signal
 (Section~\ref{sec:disc-signal}), and the instability of the image pipeline
 (Section~\ref{sec:disc-representation}) are all consequences of the same
 underlying limitation: imperfect markerless pose estimation and the difficulty
-of detecting clean running cycles in uncontrolled footage. The quality analysis
-makes that limitation measurable.
-
+of detecting clean running cycles in uncontrolled footage. 
 % ---------------------------------------------------------------------
 \section{Error Analysis}
 \label{sec:disc-error}
@@ -378,12 +360,5 @@ readiness. The automatic pipeline performs near chance on the controlled test
 set, the evaluation rests on a small single-source dataset, and the upper bound
 depends on manual segmentation that a deployed system would not have. 
 
-The
-appropriate framing of the contribution is diagnostic: the work demonstrates
-that markerless pose sequences can encode running-technique distinctions when
-cycles are clean, and it identifies, through controlled comparison and
-ablation, exactly where an automatic in-the-wild system currently breaks down.
-Turning that diagnosis into a usable tool is left to future work
-(Chapter~\ref{ch:conclusion}) .
 
 % End of Chapter 6

@@ -77,50 +77,6 @@ Raw sequence & None (whole video) & Full landmark sequence & GRU, BiLSTM & Suppl
 \end{tabularx}
 \end{table}
 
-\subsection{Handmade Landmark Upper Bound}
-\label{sec:setup-handmade}
-
-The handmade pipeline uses manually segmented cycles and the landmark
-representation. It serves as the \emph{upper bound}: it estimates the achievable
-classification performance when cycle segmentation is reliable, isolating
-classification difficulty from automatic-detection difficulty. It is
-explicitly not a deployable baseline.
-
-\subsection{Autocorr Landmark Baseline}
-\label{sec:setup-autocorr}
-
-The autocorrelation landmark pipeline is the main \emph{automatic baseline}. It
-detects cycles from the \texttt{contact\_diff} signal using the
-autocorrelation-based detector of Section~\ref{sec:method-autocorr} and uses the
-same landmark representation and classifiers as the handmade pipeline, so that
-the two differ only in cycle source.
-
-\subsection{Autocorr Image-Based Pipeline}
-\label{sec:setup-image}
-
-The image-based pipeline reuses the \emph{identical} autocorrelation cycle
-source as the landmark baseline but represents each phase as a runner-centred
-RGB crop classified by a MobileNetV2--LSTM model
-(Section~\ref{sec:method-image-rep}). Holding the cycle source fixed makes this
-a controlled comparison of \emph{representation}, separate from any historical
-image-based development milestone.
-
-\subsection{Boundary Detector Pipeline}
-\label{sec:setup-bd}
-
-The boundary-detector pipeline replaces rule-based autocorrelation with a
-learned BiLSTM foot-strike detector (Section~\ref{sec:method-bd}); downstream
-stages are unchanged. It is reported as a supplementary pipeline.
-
-\subsection{Raw Sequence Pipeline}
-\label{sec:setup-raw}
-
-The raw-sequence pipeline omits cycle cutting entirely and classifies the whole
-video's pose sequence with a recurrent model (GRU/BiLSTM,
-Section~\ref{sec:method-gru}). Here one sample corresponds to one video, so its
-evaluation unit differs from the cycle-based pipelines; it is treated as an
-exploratory, supplementary configuration and is not part of the controlled
-cycle-level comparison.
 
 % ---------------------------------------------------------------------
 \section{Model Training Configuration}
@@ -208,34 +164,9 @@ rows.
 \section{Evaluation Metrics}
 \label{sec:setup-metrics}
 
-Let $\mathrm{TP}$, $\mathrm{FP}$, $\mathrm{FN}$, and $\mathrm{TN}$ denote the
-counts of true positives, false positives, false negatives, and true negatives
-for a given class. The following metrics are used.
-
-\emph{Accuracy} is the fraction of correctly classified samples:
-\begin{equation}
-\mathrm{Accuracy} =
-\frac{\mathrm{TP} + \mathrm{TN}}{\mathrm{TP} + \mathrm{TN} + \mathrm{FP} + \mathrm{FN}}.
-\end{equation}
-
-\emph{Precision} and \emph{recall} for a class are
-\begin{equation}
-\mathrm{Precision} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FP}},
-\qquad
-\mathrm{Recall} = \frac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FN}},
-\end{equation}
-measuring, respectively, the proportion of positive predictions that are correct
-and the proportion of actual positives that are recovered.
-
-The \emph{F1 score} is their harmonic mean:
-\begin{equation}
-\mathrm{F1} =
-2 \cdot \frac{\mathrm{Precision} \cdot \mathrm{Recall}}
-{\mathrm{Precision} + \mathrm{Recall}}.
-\end{equation}
-
-The \emph{macro-averaged F1} (macro-F1) is the unweighted mean of the per-class
-F1 scores over the two classes (correct, false):
+The following metrics are used.
+\emph{Accuracy}, \emph{precision}, \emph{recall}, and \emph{F1} follow their standard definitions.
+The \emph{macro-averaged F1} (macro-F1) is the unweighted mean of per-class F1 over the two classes (correct, false):
 \begin{equation}
 \mathrm{macro\text{-}F1} =
 \frac{1}{2}\left(\mathrm{F1}_{\text{correct}} + \mathrm{F1}_{\text{false}}\right).

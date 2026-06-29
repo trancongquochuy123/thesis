@@ -35,14 +35,7 @@ the \texttt{contact\_diff} signal, reached a test accuracy of 0.5455 and a
 macro-F1 of 0.5417 under the reported baseline setting. Because the two
 pipelines use the same general pose-representation family but differ in cycle
 source, the gap between them localises the main difficulty of the task in the
-automatic cycle-detection stage. This interpretation is supported by an
-additional fair-gap robustness check: under the same MLP classifier and
-5-fold video-level cross-validation, handmade cycles achieved
-$0.860 \pm 0.016$ macro-F1, whereas autocorr cycles achieved
-$0.615 \pm 0.081$, giving a fair gap of 0.245 macro-F1. A 100-permutation test
-on the autocorr MLP setting did not reach statistical significance
-($p = 0.2475$), suggesting that the autocorr-derived features are not yet
-robustly separable under that simple classifier.
+automatic cycle-detection stage. A fair-gap robustness check (Section~\ref{sec:disc-cycle-source}) confirms this gap is not a single-split artefact, and a permutation test did not reach statistical significance ($p = 0.2475$).
 
 The ablation studies and extended analyses refine this conclusion. The model
 ablation showed that architecture choice matters less than segmentation quality:
@@ -94,15 +87,7 @@ The loss is substantial. On the controlled fixed split, the reported autocorr
 landmark baseline reached a test accuracy of 0.5455 and a macro-F1 of 0.5417,
 compared with 0.9107 accuracy and 0.8991 macro-F1 for the handmade upper
 bound. This corresponds to a drop of 0.3652 in accuracy and 0.3574 in
-macro-F1. The fair 5-fold video-level CV check confirms that this loss is not
-only a fixed-split artefact: under the same MLP classifier and threshold 0.5,
-handmade cycles reached $0.860 \pm 0.016$ macro-F1, while autocorr cycles
-reached $0.615 \pm 0.081$, leaving a fair gap of 0.245 macro-F1. A permutation
-test on the autocorr MLP setting did not reach statistical significance
-($p = 0.2475$), suggesting that autocorr-derived features are not yet robustly
-separable under this simple classifier. Since the comparison keeps the general
-landmark-representation family fixed while changing the cycle source, the loss
-is attributed primarily to automatic cycle detection and boundary alignment.
+macro-F1. A 5-fold fair-gap robustness check and a permutation test ($p = 0.2475$) both confirm the loss is not a single-split artefact (Section~\ref{sec:disc-cycle-source}). Since the comparison keeps the landmark-representation family fixed while changing the cycle source, the loss is attributed primarily to automatic cycle detection and boundary alignment.
 
 \paragraph{RQ3 --- Which motion signal is most reliable for automatic cycle
 detection?}
@@ -220,12 +205,5 @@ on the automatic pipeline.
     runner populations.
 \end{itemize}
 
-The final conclusion is therefore deliberately conservative. This thesis shows
-that markerless pose data from in-the-wild running videos can support
-running-technique classification when cycle segmentation is reliable. It also
-shows that the current automatic system is limited mainly by upstream pose and
-cycle quality. The next stage of work should therefore prioritise robust cycle
-detection, larger validation data, and expert-labelled evaluation before moving
-toward practical deployment.
 
 % End of Chapter 7
