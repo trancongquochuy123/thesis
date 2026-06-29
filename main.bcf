@@ -2420,4 +2420,46 @@
     <bcf:citekey order="26" intorder="2">bazarevsky2020blazepose</bcf:citekey>
     <bcf:citekey order="27" intorder="1">zhang2025heelstrike</bcf:citekey>
     <bcf:citekey order="27" intorder="2">sui2020gaitsegmentation</bcf:citekey>
-    <bcf:citekey
+    <bcf:citekey order="28" intorder="1">inostroza2025runningcycle</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">ordonez2016deephar</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">hochreiter1997lstm</bcf:citekey>
+    <bcf:citekey order="30" intorder="2">schuster1997bidirectional</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">donahue2015lrcn</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">sandler2018mobilenetv2</bcf:citekey>
+    <bcf:citekey order="32" intorder="2">donahue2015lrcn</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">sandler2018mobilenetv2</bcf:citekey>
+    <bcf:citekey order="33" intorder="2">donahue2015lrcn</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">fawcett2006roc</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">sokolova2009metrics</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">sokolova2009metrics</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">cutting1978gaitperiodicity</bcf:citekey>
+    <bcf:citekey order="37" intorder="2">plotnik2007gaitasymmetry</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">sandler2018mobilenetv2</bcf:citekey>
+    <bcf:citekey order="38" intorder="2">hochreiter1997lstm</bcf:citekey>
+    <bcf:citekey order="38" intorder="3">donahue2015lrcn</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">sandler2018mobilenetv2</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">sokolova2009metrics</bcf:citekey>
+    <bcf:citekey order="41" intorder="1">bazarevsky2020blazepose</bcf:citekey>
+    <bcf:citekey order="42" intorder="1">panconi2024markerless</bcf:citekey>
+  </bcf:section>
+  <!-- SORTING TEMPLATES -->
+  <bcf:sortingtemplate name="none">
+    <bcf:sort order="1">
+      <bcf:sortitem order="1">citeorder</bcf:sortitem>
+    </bcf:sort>
+    <bcf:sort order="2">
+      <bcf:sortitem order="1">intciteorder</bcf:sortitem>
+    </bcf:sort>
+  </bcf:sortingtemplate>
+  <!-- DATALISTS -->
+  <bcf:datalist section="0"
+                name="none/global//global/global/global"
+                type="entry"
+                sortingtemplatename="none"
+                sortingnamekeytemplatename="global"
+                labelprefix=""
+                uniquenametemplatename="global"
+                labelalphanametemplatename="global"
+                namehashtemplatename="global">
+  </bcf:datalist>
+</bcf:controlfile>

@@ -1,0 +1,32 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Overall framework for vision-based running technique classification from in-the-wild videos. Starting from a raw running video, the pipeline applies markerless pose estimation, filters and normalises the resulting landmarks, extracts one-dimensional motion signals, and detects running cycles via one of three interchangeable detectors (manual, autocorrelation-based, or learned boundary detector). Each accepted cycle is resampled into eight phases and encoded as either a landmark sequence or a set of image crops, which are then classified by a deep-learning model. Cycle-level predictions are aggregated into a final video-level decision.}}{12}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces MediaPipe BlazePose-33 applied to a sample running frame. The model produces 33 body landmarks with per-landmark visibility scores. A subset of 13 landmarks relevant to running form --- nose, hips, knees, ankles, heels, and foot indices --- is selected for all downstream processing.}}{13}{figure.caption.10}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Landmark vertical coordinates before (left) and after (right) hip-centred normalisation for an example video. Before normalisation, the trajectories drift with the runner's absolute position in the frame. After normalisation, all trajectories oscillate stably about zero (the hip reference) with consistent amplitude regardless of camera distance or runner position.}}{14}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Motion signals extracted from a single running video (DUNG27). Faint lines show the raw detrended signal; solid lines show the Gaussian-smoothed version ($\sigma =2$). The periodic oscillation visible in all four signals reflects the running cycle; \texttt {contact\_diff} captures left--right foot-contact asymmetry and is used as the primary cycle-detection driver.}}{15}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Running cycle boundaries detected by the autocorrelation-based detector overlaid on the \texttt {contact\_diff} signal for an example video (DUNG27). Alternating shaded bands correspond to individual FS-to-FS cycles; red dashed lines mark the detected boundaries. The periodic structure of the signal makes the boundaries reliably locatable by the autocorrelation procedure.}}{17}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Example of eight-phase sampling from an automatically detected running cycle.}}{18}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Layer-by-layer architectures of the four landmark-based classifiers. All models receive an input tensor of shape $(B,\,8,\,78)$ --- batch size, eight gait phases, and $F{=}78$ features (13 joints $\times $ 3 coordinates $+$ 3 velocity components) --- and produce a single binary logit. Colour indicates layer type: blue --- linear; amber --- convolutional; violet --- recurrent (BiLSTM); green --- normalisation or pooling; grey --- utility (flatten, dropout).}}{19}{figure.caption.16}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Main pipeline comparison. Source: \path {main_pipeline_comparison.png}.}}{32}{figure.caption.25}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Historical autocorr method evolution.}}{36}{figure.caption.33}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Controlled landmark-versus-image comparison.}}{38}{figure.caption.36}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Cycle-level versus video-level evaluation.}}{39}{figure.caption.38}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Comparison between default 0.5 threshold and tuned thresholds.}}{40}{figure.caption.40}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Pose and cycle quality summary.}}{41}{figure.caption.42}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Confusion matrix of the best handmade upper-bound model on the test set.}}{61}{figure.caption.55}%
+\contentsline {figure}{\numberline {B.2}{\ignorespaces Confusion matrix of the autocorr landmark baseline on the test set.}}{62}{figure.caption.56}%
+\contentsline {figure}{\numberline {B.3}{\ignorespaces Confusion matrix of the autocorr image-based pipeline on the test set.}}{62}{figure.caption.57}%
+\contentsline {figure}{\numberline {B.4}{\ignorespaces Example \texttt {contact\_diff} motion signal used for autocorrelation-based cycle detection.}}{63}{figure.caption.58}%
+\contentsline {figure}{\numberline {B.5}{\ignorespaces Example of an automatically detected foot-strike-to-foot-strike running cycle.}}{63}{figure.caption.59}%
+\contentsline {figure}{\numberline {B.6}{\ignorespaces Example eight-phase sampling of an automatically detected cycle.}}{63}{figure.caption.60}%
+\contentsline {figure}{\numberline {B.7}{\ignorespaces Distribution of estimated cycle periods across detected videos.}}{63}{figure.caption.61}%
+\contentsline {figure}{\numberline {B.8}{\ignorespaces Training and validation curves for the handmade upper-bound models.}}{64}{figure.caption.62}%
+\contentsline {figure}{\numberline {B.9}{\ignorespaces Breakdown of cycle-level rejection reasons in the autocorr pipeline.}}{64}{figure.caption.63}%
