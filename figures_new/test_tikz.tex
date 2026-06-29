@@ -1,0 +1,11 @@
+﻿\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\pagestyle{empty}
+\begin{document}
+\begin{tikzpicture}
+\node[draw] (a) {Hello};
+\node[draw,right=of a] (b) {TikZ};
+\draw[->] (a) -- (b);
+\end{tikzpicture}
+\end{document}

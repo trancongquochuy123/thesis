@@ -128,24 +128,34 @@ cycle-level comparison.
 
 All models are trained on the train partition, selected on the validation
 partition, and evaluated once on the test partition. The pose-sequence models
-operate on eight-phase landmark inputs (Section~\ref{sec:method-phases}). The
-image model uses eight RGB crops per detected cycle and a MobileNetV2--LSTM
-architecture \cite{sandler2018mobilenetv2, donahue2015lrcn}. Table~\ref{tab:model-config}
-reports configuration information that could be verified from the experiment
-notebooks and the hyper-parameter evidence audit. Values are reported only when
-they were explicitly found in the provided files; unsupported settings are still
-marked as not exported rather than inferred. The audited landmark-sequence
-experiments share a common training schedule of learning rate $10^{-3}$, batch
-size 16, 80 epochs, weight decay $10^{-4}$, and random seed 42. The audited
-image-based MobileNetV2--LSTM experiment uses learning rate $10^{-3}$, batch
-size 8, 40 epochs, dropout 0.4, two recurrent layers, weight decay $10^{-4}$,
-and random seed 42. Optimiser and loss-function details were not consistently
-exported for the landmark notebooks, so they are not used as comparison factors.
+operate on eight-phase landmark inputs of shape $(B,\,8,\,78)$, where
+$F{=}78$ features comprise 13 selected joints $\times$ 3 coordinates $+$ 3
+velocity components (Section~\ref{sec:method-phases}). The layer-by-layer
+architectures of the four landmark classifiers are shown in
+Figure~\ref{fig:model_architectures}.
+
+The four landmark-sequence models share a common training schedule confirmed
+from the experiment notebooks: \textbf{AdamW} optimiser with learning rate
+$10^{-3}$ and weight decay $10^{-4}$; \textbf{OneCycleLR} scheduler with
+\texttt{pct\_start}$=0.2$; \textbf{BCEWithLogitsLoss} with a class-ratio
+\texttt{pos\_weight}; gradient clipping (max norm $1.0$); and early stopping
+with patience $15$. Batch size is $16$, maximum epochs $80$, and random seed
+$42$.
+
+The image model uses eight RGB crops per detected cycle and a MobileNetV2--LSTM
+architecture \cite{sandler2018mobilenetv2, donahue2015lrcn}.
+Table~\ref{tab:model-config} summarises the per-model configuration.
+The audited MobileNetV2--LSTM experiment uses learning rate $10^{-3}$, batch
+size $8$, $40$ epochs, dropout $0.4$, two recurrent layers, weight decay
+$10^{-4}$, and random seed $42$.
 
 
 \begin{table}[htbp]
 \centering
-\caption{Model configuration evidence available from the provided experiment files. Parameter counts are reported only when they are explicitly available in the exported model-ablation report. Training settings are reported only when they were explicitly found in the notebooks or hyper-parameter evidence audit.}
+\caption{Model configuration confirmed from the experiment notebooks. Parameter
+counts are taken from the exported model-ablation report. The four
+landmark-sequence models share a common optimizer/scheduler/loss (see text);
+per-model architecture details follow Figure~\ref{fig:model_architectures}.}
 \label{tab:model-config}
 \renewcommand{\arraystretch}{1.18}
 \scriptsize
@@ -153,35 +163,46 @@ exported for the landmark notebooks, so they are not used as comparison factors.
 >{\raggedright\arraybackslash}p{0.16\textwidth}
 >{\raggedright\arraybackslash}p{0.18\textwidth}
 >{\raggedright\arraybackslash}p{0.22\textwidth}
->{\raggedright\arraybackslash}p{0.11\textwidth}
+>{\raggedright\arraybackslash}p{0.10\textwidth}
 >{\raggedright\arraybackslash}X}
 \toprule
-Model & Pipeline use & Input representation & Parameters & Verified training settings \\
+Model & Pipeline use & Input & Params & Architecture notes \\
 \midrule
-MLP & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $193{,}025$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Optimiser/loss not exported consistently. \\
+MLP & Handmade \& autocorr landmark & $(B,8,78)$ & $193{,}025$ &
+  Flatten $\to$ Linear(624$\to$256)+ReLU $\to$ Dropout(0.3) $\to$
+  Linear(256$\to$128)+ReLU $\to$ Dropout(0.3) $\to$ Linear(128$\to$1). \\
 \addlinespace
-1D-CNN & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $40{,}257$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Optimiser/loss not exported consistently. \\
+1D-CNN & Handmade \& autocorr landmark & $(B,8,78)$ & $40{,}257$ &
+  Conv1d(78$\to$64, $k$=3)+ReLU+BN $\to$ Conv1d(64$\to$128, $k$=3)+ReLU+BN
+  $\to$ AdaptiveAvgPool1d(1) $\to$ Dropout(0.3) $\to$ Linear(128$\to$1). \\
 \addlinespace
-BiLSTM & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $173{,}441$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Number of recurrent layers is exported as two in the audited upper-bound notebook. \\
+BiLSTM & Handmade \& autocorr landmark & $(B,8,78)$ & $173{,}441$ &
+  2-layer bidirectional LSTM ($h$=64) $\to$ concat[$h_\text{fwd}$, $h_\text{bwd}$]
+  (128-d) $\to$ LayerNorm(128) $\to$ Dropout(0.3) $\to$ Linear(128$\to$1). \\
 \addlinespace
-CNN-BiLSTM & Handmade and autocorr landmark model ablation & Eight-phase selected-landmark sequence with velocity features & $82{,}113$ & lr=$10^{-3}$; batch=16; epochs=80; weight decay=$10^{-4}$; seed=42. Recurrent-layer details follow the model-ablation implementation evidence. \\
+CNN-BiLSTM & Handmade \& autocorr landmark & $(B,8,78)$ & $82{,}113$ &
+  Conv1d(78$\to$64, $k$=3)+ReLU+BN $\to$ 1-layer BiLSTM ($h$=64) $\to$
+  concat (128-d) $\to$ LayerNorm(128) $\to$ Dropout(0.3) $\to$ Linear(128$\to$1). \\
 \addlinespace
-MobileNetV2--LSTM & Autocorr image-based representation experiment & Eight-phase RGB runner crops, resized to $224\times224$ & Not exported & lr=$10^{-3}$; batch=8; epochs=40; weight decay=$10^{-4}$; dropout=0.4; recurrent layers=2; seed=42. Historical 76.5\% development code additionally used a two-phase AdamW/OneCycleLR schedule; details are listed in Appendix~\ref{app:hyperparams}. \\
+MobileNetV2--LSTM & Autocorr image pipeline & 8$\times$RGB $224{\times}224$ & --- &
+  MobileNetV2 backbone (frozen or fine-tuned) $\to$ 2-layer LSTM
+  ($h$=256, dropout=0.4) $\to$ Linear($\to$1).
+  lr=$10^{-3}$; batch=8; epochs=40; seed=42. \\
 \addlinespace
-GRU / raw sequence model & Supplementary raw-sequence experiment & Video-level raw landmark sequence representation & Not exported & Not exported in the available hyper-parameter audit; treated as supplementary evidence only. \\
+GRU / BiLSTM (raw) & Supplementary raw-sequence & Full video landmark seq. & --- &
+  Whole-video recurrent model; one sample per video. Treated as supplementary
+  evidence; detailed hyper-parameters not audited. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The four landmark-sequence models are retained in the main configuration table
-because their parameter counts are present in the exported model-ablation report.
-The MobileNetV2--LSTM and raw-sequence GRU rows are retained for completeness
-because they correspond to supplementary experiments described in the experiment
-inventory. The table distinguishes between verified training settings and missing
-implementation details. In particular, the image-based model has recoverable
-learning-rate, batch-size, epoch, dropout, layer-count, and seed evidence, but no
-exported parameter count. The raw-sequence model remains less fully documented
-and is therefore interpreted only as supplementary evidence.
+Parameter counts for the four landmark models are taken directly from the
+exported model-ablation report and are used as a reference for model complexity.
+The MobileNetV2--LSTM and raw-sequence rows are included for completeness;
+their parameter counts were not exported. All landmark classifiers were trained
+under the shared schedule described above; the MobileNetV2--LSTM and
+raw-sequence models follow separate configurations noted in their respective
+rows.
 
 % ---------------------------------------------------------------------
 \section{Evaluation Metrics}

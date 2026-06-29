@@ -1,0 +1,961 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{novacheck1998biomechanics}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=429cb701c63e438bab558a626a223896}{%
+           family={Novacheck},
+           familyi={N\bibinitperiod},
+           given={Tom\bibnamedelima F.},
+           giveni={T\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{429cb701c63e438bab558a626a223896}
+      \strng{fullhash}{429cb701c63e438bab558a626a223896}
+      \strng{fullhashraw}{429cb701c63e438bab558a626a223896}
+      \strng{bibnamehash}{429cb701c63e438bab558a626a223896}
+      \strng{authorbibnamehash}{429cb701c63e438bab558a626a223896}
+      \strng{authornamehash}{429cb701c63e438bab558a626a223896}
+      \strng{authorfullhash}{429cb701c63e438bab558a626a223896}
+      \strng{authorfullhashraw}{429cb701c63e438bab558a626a223896}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Gait \& Posture}
+      \field{number}{1}
+      \field{title}{The biomechanics of running}
+      \field{volume}{7}
+      \field{year}{1998}
+      \field{pages}{77\bibrangedash 95}
+      \range{pages}{19}
+    \endentry
+    \entry{inostroza2025runningcycle}{article}{}{}
+      \name{author}{9}{}{%
+        {{hash=c6cc127fa506fae06a414ad4f1117830}{%
+           family={Inostroza-Ríos},
+           familyi={I\bibinithyphendelim R\bibinitperiod},
+           given={Felipe},
+           giveni={F\bibinitperiod}}}%
+        {{hash=7ce1ee9eeb46943c12eab14643394eb5}{%
+           family={Merino-Muñoz},
+           familyi={M\bibinithyphendelim M\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+        {{hash=659a04dbd2307e71a88388b8c980e3d4}{%
+           family={Sánchez-Ramírez},
+           familyi={S\bibinithyphendelim R\bibinitperiod},
+           given={Celso},
+           giveni={C\bibinitperiod}}}%
+        {{hash=40429f8164316fd70c77b2f1a8ef0d55}{%
+           family={Bustamante\bibnamedelima Garrido},
+           familyi={B\bibinitperiod\bibinitdelim G\bibinitperiod},
+           given={Alejandro},
+           giveni={A\bibinitperiod}}}%
+        {{hash=8729eedea23f0f7cba5928bbb042fb20}{%
+           family={Pérez-Contreras},
+           familyi={P\bibinithyphendelim C\bibinitperiod},
+           given={Jorge},
+           giveni={J\bibinitperiod}}}%
+        {{hash=0bdefe2b5ab3ac1bacb91aadec159e43}{%
+           family={Cancino-Jimenez},
+           familyi={C\bibinithyphendelim J\bibinitperiod},
+           given={Jorge},
+           giveni={J\bibinitperiod}}}%
+        {{hash=8080ca87b1077b7bd050fd7253ba8e65}{%
+           family={Arriagada-Tarifeño},
+           familyi={A\bibinithyphendelim T\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=1670585ce485435970ec76dd2841dee4}{%
+           family={Aedo-Muñoz},
+           familyi={A\bibinithyphendelim M\bibinitperiod},
+           given={Esteban},
+           giveni={E\bibinitperiod}}}%
+        {{hash=cdb0391010a70855b6793fecfa715bd3}{%
+           family={Brito},
+           familyi={B\bibinitperiod},
+           given={Ciro\bibnamedelima José},
+           giveni={C\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{d32a0e73d1481565c2a605b829790b71}
+      \strng{fullhash}{c414996eaa3f309b4d41747afe737da7}
+      \strng{fullhashraw}{c414996eaa3f309b4d41747afe737da7}
+      \strng{bibnamehash}{d32a0e73d1481565c2a605b829790b71}
+      \strng{authorbibnamehash}{d32a0e73d1481565c2a605b829790b71}
+      \strng{authornamehash}{d32a0e73d1481565c2a605b829790b71}
+      \strng{authorfullhash}{c414996eaa3f309b4d41747afe737da7}
+      \strng{authorfullhashraw}{c414996eaa3f309b4d41747afe737da7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biomechanics}
+      \field{number}{2}
+      \field{title}{The Temporal Structure of the Running Cycle, an Essential Element in the Analysis: A Critical Review}
+      \field{volume}{5}
+      \field{year}{2025}
+      \field{pages}{40}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/biomechanics5020040
+      \endverb
+    \endentry
+    \entry{panconi2024markerless}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=41876e7d00905964ab4c6a9e1275a915}{%
+           family={Panconi},
+           familyi={P\bibinitperiod},
+           given={Giuseppe},
+           giveni={G\bibinitperiod}}}%
+        {{hash=bbc55cd5ca2f8c3dc8d758143d65bdf5}{%
+           family={Grasso},
+           familyi={G\bibinitperiod},
+           given={Stefano},
+           giveni={S\bibinitperiod}}}%
+        {{hash=639e1785734d18f106f2405551fe4af8}{%
+           family={Innocenti},
+           familyi={I\bibinitperiod},
+           given={Sara},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5aa352c6d365e1b815f0c01a1a296c2e}{%
+           family={Mecheri},
+           familyi={M\bibinitperiod},
+           given={Sami},
+           giveni={S\bibinitperiod}}}%
+        {{hash=01c2168a9aa7c9a4dddd759634e57154}{%
+           family={Bravi},
+           familyi={B\bibinitperiod},
+           given={Riccardo},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{6200d879541a5f6a7690c0158419f19e}
+      \strng{fullhash}{0092789a5b3712d34078a601e1ac1389}
+      \strng{fullhashraw}{0092789a5b3712d34078a601e1ac1389}
+      \strng{bibnamehash}{0092789a5b3712d34078a601e1ac1389}
+      \strng{authorbibnamehash}{0092789a5b3712d34078a601e1ac1389}
+      \strng{authornamehash}{6200d879541a5f6a7690c0158419f19e}
+      \strng{authorfullhash}{0092789a5b3712d34078a601e1ac1389}
+      \strng{authorfullhashraw}{0092789a5b3712d34078a601e1ac1389}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biomechanics}
+      \field{number}{3}
+      \field{title}{Markerless 2D Pose Estimation for Biomechanical Analysis in Sports: A Review}
+      \field{volume}{5}
+      \field{year}{2024}
+      \field{pages}{40}
+      \range{pages}{1}
+    \endentry
+    \entry{bulling2014tutorial}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=5153be8c2167a45315a4a73b5f626ab7}{%
+           family={Bulling},
+           familyi={B\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e1a5f8509d8811e25f41d3fe9873ffc3}{%
+           family={Blanke},
+           familyi={B\bibinitperiod},
+           given={Ulf},
+           giveni={U\bibinitperiod}}}%
+        {{hash=457dd3049a60059cf69e775a47f0c154}{%
+           family={Schiele},
+           familyi={S\bibinitperiod},
+           given={Bernt},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{de1e9ae90148bb7b19e98ac36a3719ef}
+      \strng{fullhash}{eb318301917012e76d807ead568b6baa}
+      \strng{fullhashraw}{eb318301917012e76d807ead568b6baa}
+      \strng{bibnamehash}{eb318301917012e76d807ead568b6baa}
+      \strng{authorbibnamehash}{eb318301917012e76d807ead568b6baa}
+      \strng{authornamehash}{de1e9ae90148bb7b19e98ac36a3719ef}
+      \strng{authorfullhash}{eb318301917012e76d807ead568b6baa}
+      \strng{authorfullhashraw}{eb318301917012e76d807ead568b6baa}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM Computing Surveys}
+      \field{number}{3}
+      \field{title}{A tutorial on human activity recognition using body-worn inertial sensors}
+      \field{volume}{46}
+      \field{year}{2014}
+      \field{pages}{1\bibrangedash 33}
+      \range{pages}{33}
+    \endentry
+    \entry{topham2023hpesurvey}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=faa42e34c53e6883d3f328f29bd97acd}{%
+           family={Topham},
+           familyi={T\bibinitperiod},
+           given={Luke\bibnamedelima K.},
+           giveni={L\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=b01a88272ef2de4c37f06b8443168c21}{%
+           family={Khan},
+           familyi={K\bibinitperiod},
+           given={Wasiq},
+           giveni={W\bibinitperiod}}}%
+        {{hash=275962dd2f978b1a75fab971bcda4a09}{%
+           family={Al-Jumeily},
+           familyi={A\bibinithyphendelim J\bibinitperiod},
+           given={Dhiya},
+           giveni={D\bibinitperiod}}}%
+        {{hash=855c40fcf64ce08dd0039899ac86dc1e}{%
+           family={Hussain},
+           familyi={H\bibinitperiod},
+           given={Abir},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{53dea63d1295ab0081a285d5ffd1dd78}
+      \strng{fullhash}{e290d14db598fd902a5e9a17b784442d}
+      \strng{fullhashraw}{e290d14db598fd902a5e9a17b784442d}
+      \strng{bibnamehash}{e290d14db598fd902a5e9a17b784442d}
+      \strng{authorbibnamehash}{e290d14db598fd902a5e9a17b784442d}
+      \strng{authornamehash}{53dea63d1295ab0081a285d5ffd1dd78}
+      \strng{authorfullhash}{e290d14db598fd902a5e9a17b784442d}
+      \strng{authorfullhashraw}{e290d14db598fd902a5e9a17b784442d}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM Computing Surveys}
+      \field{number}{6}
+      \field{title}{Human Body Pose Estimation for Gait Identification: A Comprehensive Survey of Datasets and Models}
+      \field{volume}{55}
+      \field{year}{2023}
+      \field{pages}{1\bibrangedash 42}
+      \range{pages}{42}
+    \endentry
+    \entry{lugaresi2019mediapipe}{inproceedings}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{3}{}{%
+        {{hash=ec152126f5b7712b4664db54b34b4645}{%
+           family={Lugaresi},
+           familyi={L\bibinitperiod},
+           given={Camillo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=6ac68c9c2cdd3f35d3081f63bbff53f4}{%
+           family={Tang},
+           familyi={T\bibinitperiod},
+           given={Jiuqiang},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5ffdaa304dcd72834225b0118f1bcafe}{%
+           family={Nash},
+           familyi={N\bibinitperiod},
+           given={Hadon},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{61a5cc34be11c6018e3b2391e9ea2937}
+      \strng{fullhash}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \strng{fullhashraw}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \strng{bibnamehash}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \strng{authorbibnamehash}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \strng{authornamehash}{61a5cc34be11c6018e3b2391e9ea2937}
+      \strng{authorfullhash}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \strng{authorfullhashraw}{3c9ea95d6fd646fe22bf6d39d9d1fe9a}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Third Workshop on Computer Vision for AR/VR at IEEE CVPR}
+      \field{title}{MediaPipe: A Framework for Building Perception Pipelines}
+      \field{year}{2019}
+    \endentry
+    \entry{bazarevsky2020blazepose}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=dfb2aa3f22269786162c9a57cea77fe8}{%
+           family={Bazarevsky},
+           familyi={B\bibinitperiod},
+           given={Valentin},
+           giveni={V\bibinitperiod}}}%
+        {{hash=b5bb8e21aa48dc99a977a72e130704fe}{%
+           family={Grishchenko},
+           familyi={G\bibinitperiod},
+           given={Ivan},
+           giveni={I\bibinitperiod}}}%
+        {{hash=00821d21b98f6ba602fb8b5b8900bf21}{%
+           family={Raveendran},
+           familyi={R\bibinitperiod},
+           given={Karthik},
+           giveni={K\bibinitperiod}}}%
+        {{hash=c6db18c5801e610209672dd9ad86131a}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Tyler},
+           giveni={T\bibinitperiod}}}%
+        {{hash=ae021641a8f85fd2607152ab99ed115b}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Fan},
+           giveni={F\bibinitperiod}}}%
+        {{hash=bc9b23f96eed985127659775e2b92e3e}{%
+           family={Grundmann},
+           familyi={G\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{1bd15b089228fd239d9cd7e38d190e14}
+      \strng{fullhash}{702429e7bbf509350a61ca1f7830f982}
+      \strng{fullhashraw}{702429e7bbf509350a61ca1f7830f982}
+      \strng{bibnamehash}{702429e7bbf509350a61ca1f7830f982}
+      \strng{authorbibnamehash}{702429e7bbf509350a61ca1f7830f982}
+      \strng{authornamehash}{1bd15b089228fd239d9cd7e38d190e14}
+      \strng{authorfullhash}{702429e7bbf509350a61ca1f7830f982}
+      \strng{authorfullhashraw}{702429e7bbf509350a61ca1f7830f982}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2006.10204}
+      \field{title}{BlazePose: On-device Real-time Body Pose Tracking}
+      \field{year}{2020}
+    \endentry
+    \entry{dicharry2010kinematics}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=f0834cb703c31dd7b91008bdd661b742}{%
+           family={Dicharry},
+           familyi={D\bibinitperiod},
+           given={Jay},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{fullhash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{fullhashraw}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{bibnamehash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{authorbibnamehash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{authornamehash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{authorfullhash}{f0834cb703c31dd7b91008bdd661b742}
+      \strng{authorfullhashraw}{f0834cb703c31dd7b91008bdd661b742}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Clinics in Sports Medicine}
+      \field{number}{3}
+      \field{title}{Kinematics and Kinetics of Gait: From Lab to Clinic}
+      \field{volume}{29}
+      \field{year}{2010}
+      \field{pages}{347\bibrangedash 364}
+      \range{pages}{18}
+    \endentry
+    \entry{fiaz2026gaitphase}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=837b52d7a6cedd566218578189862124}{%
+           family={Fiaz},
+           familyi={F\bibinitperiod},
+           given={Muhammad},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ef94fbff0c25a332bc196c7800243873}{%
+           family={Guido},
+           familyi={G\bibinitperiod},
+           given={Rosita},
+           giveni={R\bibinitperiod}}}%
+        {{hash=34e5194680840fa3e127c73dd297b1a3}{%
+           family={Conforti},
+           familyi={C\bibinitperiod},
+           given={Domenico},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{783a1ec22db97ffaa02134227923c56c}
+      \strng{fullhash}{e102a1b098fc0db103d585f34aae594c}
+      \strng{fullhashraw}{e102a1b098fc0db103d585f34aae594c}
+      \strng{bibnamehash}{e102a1b098fc0db103d585f34aae594c}
+      \strng{authorbibnamehash}{e102a1b098fc0db103d585f34aae594c}
+      \strng{authornamehash}{783a1ec22db97ffaa02134227923c56c}
+      \strng{authorfullhash}{e102a1b098fc0db103d585f34aae594c}
+      \strng{authorfullhashraw}{e102a1b098fc0db103d585f34aae594c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Sciences}
+      \field{number}{3}
+      \field{title}{Machine Learning Models for Reliable Gait Phase Detection Using Lower-Limb Wearable Sensor Data}
+      \field{volume}{16}
+      \field{year}{2026}
+      \field{pages}{1397}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/app16031397
+      \endverb
+    \endentry
+    \entry{cao2019openpose}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=e59a7a0ecac3deea0c72e863b5c17634}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Zhe},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=d63960806471ec9177f5651a8f37927d}{%
+           family={Hidalgo},
+           familyi={H\bibinitperiod},
+           given={Gines},
+           giveni={G\bibinitperiod}}}%
+        {{hash=c9591f6ffd83f6ee3caa1e9d20c21a52}{%
+           family={Simon},
+           familyi={S\bibinitperiod},
+           given={Tomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=eeb215d31998bd52613e3d32b708040c}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Shih-En},
+           giveni={S\bibinithyphendelim E\bibinitperiod}}}%
+        {{hash=eec556189169ec6c7325cc7a804cbc02}{%
+           family={Sheikh},
+           familyi={S\bibinitperiod},
+           given={Yaser},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{8c1603e58c3074e7c4f62d42598b9304}
+      \strng{fullhash}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \strng{fullhashraw}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \strng{bibnamehash}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \strng{authorbibnamehash}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \strng{authornamehash}{8c1603e58c3074e7c4f62d42598b9304}
+      \strng{authorfullhash}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \strng{authorfullhashraw}{dbe56f960b8d421f6ae8ff2dd2b677c2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{number}{1}
+      \field{title}{OpenPose: Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields}
+      \field{volume}{43}
+      \field{year}{2019}
+      \field{pages}{172\bibrangedash 186}
+      \range{pages}{15}
+    \endentry
+    \entry{ghoussayni2004gait}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=f0d41a10cfeb0ae6acfa9002c7dd6cd5}{%
+           family={Ghoussayni},
+           familyi={G\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=ffc1544d53c90d6dd2d96795474828b4}{%
+           family={Stevens},
+           familyi={S\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=179692af559912ae03484404f79ea672}{%
+           family={Durham},
+           familyi={D\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=63883719678214ac34bcd0b60a99889f}{%
+           family={Ewins},
+           familyi={E\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{6ec08ade102a5e0b56ac2d8838b8a11e}
+      \strng{fullhash}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \strng{fullhashraw}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \strng{bibnamehash}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \strng{authorbibnamehash}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \strng{authornamehash}{6ec08ade102a5e0b56ac2d8838b8a11e}
+      \strng{authorfullhash}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \strng{authorfullhashraw}{83caf69f88a6c22f5f15c346c6b1b0a8}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Gait \& Posture}
+      \field{number}{3}
+      \field{title}{Assessment and validation of a simple automated method for the detection of gait events and intervals}
+      \field{volume}{20}
+      \field{year}{2004}
+      \field{pages}{266\bibrangedash 272}
+      \range{pages}{7}
+    \endentry
+    \entry{zhang2025heelstrike}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=e5bb0b1c2e08a5156976a4594c6eff01}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Longbin},
+           giveni={L\bibinitperiod}}}%
+        {{hash=4f6ad991626d880503adf0ce0fa17bb9}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Tsung-Lin},
+           giveni={T\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=4f7790a8ac7780aa9dd70427a73a6ec8}{%
+           family={Sidarta},
+           familyi={S\bibinitperiod},
+           given={Ananda},
+           giveni={A\bibinitperiod}}}%
+        {{hash=d2ecb15d189f67b5625c57b784106d4c}{%
+           family={Yan},
+           familyi={Y\bibinitperiod},
+           given={Xiaoyue},
+           giveni={X\bibinitperiod}}}%
+        {{hash=79288dd814cd364e1ed6150fe9f8bcb6}{%
+           family={Jatesiktat},
+           familyi={J\bibinitperiod},
+           given={Prayook},
+           giveni={P\bibinitperiod}}}%
+        {{hash=ed8c01a74b0c0e932ca024924ffa4e53}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Kailun},
+           giveni={K\bibinitperiod}}}%
+        {{hash=3d9d7816f6eee2256bda809f27a1b51c}{%
+           family={Ang},
+           familyi={A\bibinitperiod},
+           given={Wei\bibnamedelima Tech},
+           giveni={W\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{5abe785015e06f2bfbc1dd0eb925d5ab}
+      \strng{fullhash}{8ec21c682bd3b30cc2703b6aebcac50a}
+      \strng{fullhashraw}{8ec21c682bd3b30cc2703b6aebcac50a}
+      \strng{bibnamehash}{5abe785015e06f2bfbc1dd0eb925d5ab}
+      \strng{authorbibnamehash}{5abe785015e06f2bfbc1dd0eb925d5ab}
+      \strng{authornamehash}{5abe785015e06f2bfbc1dd0eb925d5ab}
+      \strng{authorfullhash}{8ec21c682bd3b30cc2703b6aebcac50a}
+      \strng{authorfullhashraw}{8ec21c682bd3b30cc2703b6aebcac50a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2503.00794}
+      \field{title}{Detecting Heel Strike and Toe Off Events Using Kinematic Methods and {LSTM} Models}
+      \field{year}{2025}
+    \endentry
+    \entry{yan2018stgcn}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=e55a8dac2285c64c0fd5cf7e869e37e4}{%
+           family={Yan},
+           familyi={Y\bibinitperiod},
+           given={Sijie},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d5051eb0f62df89577bc02f764c3f11a}{%
+           family={Xiong},
+           familyi={X\bibinitperiod},
+           given={Yuanjun},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=f4033e88b680ba7279a268e75f80b1d3}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Dahua},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{da03106f592fbe2659519d152b2647c5}
+      \strng{fullhash}{4d448bb063575c011ecc58096d1b3512}
+      \strng{fullhashraw}{4d448bb063575c011ecc58096d1b3512}
+      \strng{bibnamehash}{4d448bb063575c011ecc58096d1b3512}
+      \strng{authorbibnamehash}{4d448bb063575c011ecc58096d1b3512}
+      \strng{authornamehash}{da03106f592fbe2659519d152b2647c5}
+      \strng{authorfullhash}{4d448bb063575c011ecc58096d1b3512}
+      \strng{authorfullhashraw}{4d448bb063575c011ecc58096d1b3512}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{AAAI Conference on Artificial Intelligence}
+      \field{title}{Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition}
+      \field{year}{2018}
+    \endentry
+    \entry{ordonez2016deephar}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=54e6999862458057e0e3b841d34f10bc}{%
+           family={Ordóñez},
+           familyi={O\bibinitperiod},
+           given={Francisco\bibnamedelima Javier},
+           giveni={F\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=fceef8e09887f1a6f7d48fb150a7eccf}{%
+           family={Roggen},
+           familyi={R\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{60615f7580047fdc868a60a08aad428f}
+      \strng{fullhash}{60615f7580047fdc868a60a08aad428f}
+      \strng{fullhashraw}{60615f7580047fdc868a60a08aad428f}
+      \strng{bibnamehash}{60615f7580047fdc868a60a08aad428f}
+      \strng{authorbibnamehash}{60615f7580047fdc868a60a08aad428f}
+      \strng{authornamehash}{60615f7580047fdc868a60a08aad428f}
+      \strng{authorfullhash}{60615f7580047fdc868a60a08aad428f}
+      \strng{authorfullhashraw}{60615f7580047fdc868a60a08aad428f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{1}
+      \field{title}{Deep Convolutional and LSTM Recurrent Neural Networks for Multimodal Wearable Activity Recognition}
+      \field{volume}{16}
+      \field{year}{2016}
+      \field{pages}{115}
+      \range{pages}{1}
+    \endentry
+    \entry{hochreiter1997lstm}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=41b31e29fb2bdbf9f5c9c1b0d5b3e815}{%
+           family={Hochreiter},
+           familyi={H\bibinitperiod},
+           given={Sepp},
+           giveni={S\bibinitperiod}}}%
+        {{hash=288bdbcfe1b91ad7484d7a24f74f99ed}{%
+           family={Schmidhuber},
+           familyi={S\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{fullhash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{fullhashraw}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{bibnamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authorbibnamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authornamehash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authorfullhash}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \strng{authorfullhashraw}{4c2e1e2e1ac91e1df9d4f7b85ebe39b4}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Neural Computation}
+      \field{number}{8}
+      \field{title}{Long Short-Term Memory}
+      \field{volume}{9}
+      \field{year}{1997}
+      \field{pages}{1735\bibrangedash 1780}
+      \range{pages}{46}
+    \endentry
+    \entry{schuster1997bidirectional}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=29ea22df63f174ac629e9ef100b40484}{%
+           family={Schuster},
+           familyi={S\bibinitperiod},
+           given={Mike},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b1d3b7d330a0b9cd14b9467a0dfa8189}{%
+           family={Paliwal},
+           familyi={P\bibinitperiod},
+           given={Kuldip\bibnamedelima K.},
+           giveni={K\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{fullhash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{fullhashraw}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{bibnamehash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{authorbibnamehash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{authornamehash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{authorfullhash}{2f2edc15114454b7b2f9bea34478b390}
+      \strng{authorfullhashraw}{2f2edc15114454b7b2f9bea34478b390}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Signal Processing}
+      \field{number}{11}
+      \field{title}{Bidirectional recurrent neural networks}
+      \field{volume}{45}
+      \field{year}{1997}
+      \field{pages}{2673\bibrangedash 2681}
+      \range{pages}{9}
+    \endentry
+    \entry{donahue2015lrcn}{inproceedings}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{3}{}{%
+        {{hash=913090a0d65c7a300c602f5a5a5a61e3}{%
+           family={Donahue},
+           familyi={D\bibinitperiod},
+           given={Jeff},
+           giveni={J\bibinitperiod}}}%
+        {{hash=68b917d11d355ed641ee448751fb3ba5}{%
+           family={Hendricks},
+           familyi={H\bibinitperiod},
+           given={Lisa\bibnamedelima Anne},
+           giveni={L\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=b7cd28a25c761aa64034ab0997a2b6ec}{%
+           family={Guadarrama},
+           familyi={G\bibinitperiod},
+           given={Sergio},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{7ac1e1f2f118ad92ff5d2051af9c6334}
+      \strng{fullhash}{e756f1fe643d3b87426e224c2496897a}
+      \strng{fullhashraw}{e756f1fe643d3b87426e224c2496897a}
+      \strng{bibnamehash}{e756f1fe643d3b87426e224c2496897a}
+      \strng{authorbibnamehash}{e756f1fe643d3b87426e224c2496897a}
+      \strng{authornamehash}{7ac1e1f2f118ad92ff5d2051af9c6334}
+      \strng{authorfullhash}{e756f1fe643d3b87426e224c2496897a}
+      \strng{authorfullhashraw}{e756f1fe643d3b87426e224c2496897a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
+      \field{title}{Long-term Recurrent Convolutional Networks for Visual Recognition and Description}
+      \field{year}{2015}
+      \field{pages}{2625\bibrangedash 2634}
+      \range{pages}{10}
+    \endentry
+    \entry{sandler2018mobilenetv2}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=8f90fd131c2bbfde4d0e9fdd7ed4ea8b}{%
+           family={Sandler},
+           familyi={S\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod}}}%
+        {{hash=315c4166fc1f7cb66324a7f0d82827cd}{%
+           family={Howard},
+           familyi={H\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=d767e8e4d733bcf728bcdf2c193462f7}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Menglong},
+           giveni={M\bibinitperiod}}}%
+        {{hash=48f4090a93cf9f445057a9d6defe7973}{%
+           family={Zhmoginov},
+           familyi={Z\bibinitperiod},
+           given={Andrey},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9dddfcfd529634a150ee38ee5c0203d7}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Liang-Chieh},
+           giveni={L\bibinithyphendelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{70179dd377b16c4cfcc0748ef0bd028a}
+      \strng{fullhash}{8d58d04315a5e1c06300772330b235d7}
+      \strng{fullhashraw}{8d58d04315a5e1c06300772330b235d7}
+      \strng{bibnamehash}{8d58d04315a5e1c06300772330b235d7}
+      \strng{authorbibnamehash}{8d58d04315a5e1c06300772330b235d7}
+      \strng{authornamehash}{70179dd377b16c4cfcc0748ef0bd028a}
+      \strng{authorfullhash}{8d58d04315a5e1c06300772330b235d7}
+      \strng{authorfullhashraw}{8d58d04315a5e1c06300772330b235d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}
+      \field{title}{MobileNetV2: Inverted Residuals and Linear Bottlenecks}
+      \field{year}{2018}
+      \field{pages}{4510\bibrangedash 4520}
+      \range{pages}{11}
+    \endentry
+    \entry{singh2018gaitsurvey}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=07991e2b387e437668f339e7a9f19f9c}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={Jasvinder\bibnamedelima Pal},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=afb0065e2abe8fc78d6f2e819f55716a}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Sanjeev},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0c2d7f6406a71a2324c6889206b49673}{%
+           family={Arora},
+           familyi={A\bibinitperiod},
+           given={Sakshi},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0a4771d02e96e1bf7282e2de396aae58}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={Uday\bibnamedelima Pratap},
+           giveni={U\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{08047573c33539143922a2c74704839c}
+      \strng{fullhash}{ab69ee273e4161a946f415b70f0295ca}
+      \strng{fullhashraw}{ab69ee273e4161a946f415b70f0295ca}
+      \strng{bibnamehash}{ab69ee273e4161a946f415b70f0295ca}
+      \strng{authorbibnamehash}{ab69ee273e4161a946f415b70f0295ca}
+      \strng{authornamehash}{08047573c33539143922a2c74704839c}
+      \strng{authorfullhash}{ab69ee273e4161a946f415b70f0295ca}
+      \strng{authorfullhashraw}{ab69ee273e4161a946f415b70f0295ca}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{Vision-based gait recognition: A survey}
+      \field{volume}{6}
+      \field{year}{2018}
+      \field{pages}{70497\bibrangedash 70527}
+      \range{pages}{31}
+    \endentry
+    \entry{sui2020gaitsegmentation}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=ac50d7ccb96568a3e504b57083d8afc6}{%
+           family={Sui},
+           familyi={S\bibinitperiod},
+           given={Jien-De},
+           giveni={J\bibinithyphendelim D\bibinitperiod}}}%
+        {{hash=be852c22bc627aaa3d8bcd1c7077f8a5}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Wei-Han},
+           giveni={W\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=0a8095012e9f60c5b6a9ba464f9f6d40}{%
+           family={Shiang},
+           familyi={S\bibinitperiod},
+           given={Tzyy-Yuang},
+           giveni={T\bibinithyphendelim Y\bibinitperiod}}}%
+        {{hash=045f4acae7ba0cb94e936e3d5753020f}{%
+           family={Chang},
+           familyi={C\bibinitperiod},
+           given={Tian-Sheuan},
+           giveni={T\bibinithyphendelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb883269b272e54693617fed6c241890}
+      \strng{fullhash}{a5005fbac29c03dda85d07652898335d}
+      \strng{fullhashraw}{a5005fbac29c03dda85d07652898335d}
+      \strng{bibnamehash}{a5005fbac29c03dda85d07652898335d}
+      \strng{authorbibnamehash}{a5005fbac29c03dda85d07652898335d}
+      \strng{authornamehash}{eb883269b272e54693617fed6c241890}
+      \strng{authorfullhash}{a5005fbac29c03dda85d07652898335d}
+      \strng{authorfullhashraw}{a5005fbac29c03dda85d07652898335d}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{IEEE International Symposium on Circuits and Systems (ISCAS)}
+      \field{title}{Real-Time Wearable Gait Phase Segmentation for Running and Walking}
+      \field{year}{2020}
+      \field{pages}{1\bibrangedash 5}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1109/ISCAS45731.2020.9181210
+      \endverb
+    \endentry
+    \entry{fawcett2006roc}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=9c15aa0b2a7683cefeaa12c991d0b1c2}{%
+           family={Fawcett},
+           familyi={F\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{fullhash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{fullhashraw}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{bibnamehash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{authorbibnamehash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{authornamehash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{authorfullhash}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \strng{authorfullhashraw}{9c15aa0b2a7683cefeaa12c991d0b1c2}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Pattern Recognition Letters}
+      \field{number}{8}
+      \field{title}{An Introduction to {ROC} Analysis}
+      \field{volume}{27}
+      \field{year}{2006}
+      \field{pages}{861\bibrangedash 874}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/j.patrec.2005.10.010
+      \endverb
+    \endentry
+    \entry{sokolova2009metrics}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=2adefbc8409f58c304df957e60c49341}{%
+           family={Sokolova},
+           familyi={S\bibinitperiod},
+           given={Marina},
+           giveni={M\bibinitperiod}}}%
+        {{hash=2c32da83b97570a90db8231cf70f38ce}{%
+           family={Lapalme},
+           familyi={L\bibinitperiod},
+           given={Guy},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{fullhash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{fullhashraw}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{bibnamehash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{authorbibnamehash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{authornamehash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{authorfullhash}{7583d9686fbf26bcb2c9608545b6c971}
+      \strng{authorfullhashraw}{7583d9686fbf26bcb2c9608545b6c971}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Information Processing \& Management}
+      \field{number}{4}
+      \field{title}{A Systematic Analysis of Performance Measures for Classification Tasks}
+      \field{volume}{45}
+      \field{year}{2009}
+      \field{pages}{427\bibrangedash 437}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.ipm.2009.03.002
+      \endverb
+    \endentry
+    \entry{plotnik2007gaitasymmetry}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=5bf7a1c5197149887c0da108799b9888}{%
+           family={Plotnik},
+           familyi={P\bibinitperiod},
+           given={Meir},
+           giveni={M\bibinitperiod}}}%
+        {{hash=94c55bb217e1542c67d628e06f1561b3}{%
+           family={Giladi},
+           familyi={G\bibinitperiod},
+           given={Nir},
+           giveni={N\bibinitperiod}}}%
+        {{hash=bb1b55fa34693d71ca9e1104f846fa42}{%
+           family={Hausdorff},
+           familyi={H\bibinitperiod},
+           given={Jeffrey\bibnamedelima M.},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{e7b2257cf825b6d8a86c138f52c6b9e7}
+      \strng{fullhash}{858411e59f496eeabb25286f7136dbb6}
+      \strng{fullhashraw}{858411e59f496eeabb25286f7136dbb6}
+      \strng{bibnamehash}{858411e59f496eeabb25286f7136dbb6}
+      \strng{authorbibnamehash}{858411e59f496eeabb25286f7136dbb6}
+      \strng{authornamehash}{e7b2257cf825b6d8a86c138f52c6b9e7}
+      \strng{authorfullhash}{858411e59f496eeabb25286f7136dbb6}
+      \strng{authorfullhashraw}{858411e59f496eeabb25286f7136dbb6}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Experimental Brain Research}
+      \field{title}{A new measure for quantifying the bilateral coordination of human gait}
+      \field{volume}{181}
+      \field{year}{2007}
+      \field{pages}{561\bibrangedash 570}
+      \range{pages}{10}
+    \endentry
+  \enddatalist
+  \missing{cutting1978gaitperiodicity}
+  \missing{jangua2021gait2dposes}
+\endrefsection
+\endinput
+

@@ -1,0 +1,20 @@
+# Node / JS / TS
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

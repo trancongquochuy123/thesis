@@ -1,0 +1,175 @@
+﻿{
+  "video": "/content/drive/MyDrive/Colab Notebooks/Data2/Video/correct/DUNG27.mp4",
+  "signal": "head_y_nose",
+  "proc_shape": [
+    720,
+    405
+  ],
+  "n_frames": 410,
+  "n_cycles": 6,
+  "median_dur": 1.6667,
+  "cadence_spm": 36.0,
+  "quality": {
+    "avg_quality": 0.780709534368071,
+    "nose_vis_avg": 0.999163806438446,
+    "heel_vis_avg": 0.8779985904693604,
+    "knee_vis_avg": 0.7397381067276001
+  },
+  "params": {
+    "target_fps": "30",
+    "target_width": "1280",
+    "target_height": "720",
+    "flip_horizontal": "False",
+    "pose_model": "heavy",
+    "min_det_conf": "0.5",
+    "min_presence_conf": "0.5",
+    "min_track_conf": "0.5",
+    "vis_threshold": "0.45",
+    "max_jump": "0.08",
+    "max_interp_gap": "5",
+    "head_stride_peaks": "1",
+    "min_cycle_s": "0.5",
+    "max_cycle_s": "3.5",
+    "max_dev_ratio": "0.4",
+    "head_sigma": "3",
+    "head_prominence": "0.005",
+    "n_cycles_show": "3",
+    "n_cycles_batch": "1",
+    "n_frames": "5",
+    "show_pose": "True"
+  },
+  "cycles": [
+    {
+      "idx": 2,
+      "f_start": 82,
+      "f_end": 123,
+      "t_start": 2.7333,
+      "t_end": 4.1,
+      "duration": 1.3667,
+      "sampled_frames": [
+        82,
+        94,
+        102,
+        112,
+        117
+      ],
+      "sample_amps": [
+        0.0086,
+        -0.0028,
+        -0.0057,
+        0.0007,
+        0.0046
+      ]
+    },
+    {
+      "idx": 3,
+      "f_start": 123,
+      "f_end": 179,
+      "t_start": 4.1,
+      "t_end": 5.9667,
+      "duration": 1.8667,
+      "sampled_frames": [
+        129,
+        133,
+        145,
+        154,
+        178
+      ],
+      "sample_amps": [
+        0.004,
+        0.0004,
+        -0.0035,
+        -0.0076,
+        0.008
+      ]
+    },
+    {
+      "idx": 4,
+      "f_start": 179,
+      "f_end": 230,
+      "t_start": 5.9667,
+      "t_end": 7.6667,
+      "duration": 1.7,
+      "sampled_frames": [
+        179,
+        189,
+        206,
+        214,
+        222
+      ],
+      "sample_amps": [
+        0.0081,
+        0.0003,
+        -0.005,
+        -0.0025,
+        0.0038
+      ]
+    },
+    {
+      "idx": 5,
+      "f_start": 230,
+      "f_end": 283,
+      "t_start": 7.6667,
+      "t_end": 9.4333,
+      "duration": 1.7667,
+      "sampled_frames": [
+        240,
+        260,
+        267,
+        274,
+        282
+      ],
+      "sample_amps": [
+        0.0002,
+        -0.0056,
+        -0.003,
+        0.0043,
+        0.0087
+      ]
+    },
+    {
+      "idx": 6,
+      "f_start": 283,
+      "f_end": 332,
+      "t_start": 9.4333,
+      "t_end": 11.0667,
+      "duration": 1.6333,
+      "sampled_frames": [
+        283,
+        290,
+        294,
+        297,
+        306
+      ],
+      "sample_amps": [
+        0.0088,
+        0.0041,
+        -0.0004,
+        -0.0032,
+        -0.0058
+      ]
+    },
+    {
+      "idx": 7,
+      "f_start": 332,
+      "f_end": 376,
+      "t_start": 11.0667,
+      "t_end": 12.5333,
+      "duration": 1.4667,
+      "sampled_frames": [
+        339,
+        363,
+        368,
+        370,
+        375
+      ],
+      "sample_amps": [
+        0.0035,
+        -0.0078,
+        -0.0046,
+        -0.0012,
+        0.0086
+      ]
+    }
+  ]
+}

@@ -8,7 +8,6 @@
 %   \usepackage{booktabs}  \usepackage{array}  \usepackage{tabularx}
 %   \usepackage{graphicx}  \usepackage{amsmath}
 %   \usepackage{algorithm}  \usepackage{algpseudocode}
-%   \usepackage{tikz}  \usetikzlibrary{positioning, arrows.meta, fit}
 %
 % This chapter describes methods only. No empirical results appear here.
 % Citation keys are drawn from references.bib and the verified project
@@ -42,53 +41,16 @@ isolating the effect of cycle source on performance.
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[
-    node distance=1.15cm,
-    every node/.style={font=\small},
-    process/.style={
-        rectangle,
-        rounded corners,
-        draw,
-        align=center,
-        minimum width=3.5cm,
-        minimum height=0.85cm
-    },
-    arrow/.style={-{Latex[length=2mm]}, thick}
-]
-
-\node[process] (video) {Raw Running\\Video};
-\node[process, below=of video] (pose) {Markerless Pose\\Estimation};
-\node[process, below=of pose] (filter) {Landmark Filtering\\and Normalization};
-\node[process, below=of filter] (signal) {Motion Signal\\Extraction};
-\node[process, below=of signal] (cycle) {Running Cycle\\Detection};
-\node[process, below=of cycle] (phase) {Eight-Phase\\Cycle Sampling};
-\node[process, below left=1.15cm and 1.5cm of phase] (landmark) {Landmark-Based\\Representation};
-\node[process, below right=1.15cm and 1.5cm of phase] (image) {Image-Based\\Representation};
-\node[process, below=2.0cm of phase] (classifier) {Deep Learning\\Classifier};
-\node[process, below=of classifier] (eval) {Evaluation and\\Error Analysis};
-
-\draw[arrow] (video) -- (pose);
-\draw[arrow] (pose) -- (filter);
-\draw[arrow] (filter) -- (signal);
-\draw[arrow] (signal) -- (cycle);
-\draw[arrow] (cycle) -- (phase);
-\draw[arrow] (phase) -- (landmark);
-\draw[arrow] (phase) -- (image);
-\draw[arrow] (landmark) -- (classifier);
-\draw[arrow] (image) -- (classifier);
-\draw[arrow] (classifier) -- (eval);
-
-\node[
-    draw,
-    dashed,
-    rounded corners,
-    fit=(landmark)(image),
-    inner sep=0.25cm,
-    label={[font=\small]above:Representation}
-] {};
-
-\end{tikzpicture}
-\caption{Overall framework for vision-based running technique classification from in-the-wild videos. The pipeline first extracts markerless pose landmarks, filters and normalizes them, derives motion signals for running cycle detection, samples each cycle into eight phases, and then performs classification using either landmark-based or image-based representations.}
+\includegraphics[width=\textwidth]{figures_new/fig31_pipeline}
+\caption{Overall framework for vision-based running technique classification
+from in-the-wild videos. Starting from a raw running video, the pipeline
+applies markerless pose estimation, filters and normalises the resulting
+landmarks, extracts one-dimensional motion signals, and detects running cycles
+via one of three interchangeable detectors (manual, autocorrelation-based, or
+learned boundary detector). Each accepted cycle is resampled into eight phases
+and encoded as either a landmark sequence or a set of image crops, which are
+then classified by a deep-learning model. Cycle-level predictions are
+aggregated into a final video-level decision.}
 \label{fig:method_pipeline}
 \end{figure}
 
@@ -126,6 +88,18 @@ concentrated in the trunk orientation and the lower limbs
 (Chapter~\ref{ch:literature-review}). The lower-limb landmarks (ankles, heels,
 toes) are the most diagnostic but also the most prone to noise and occlusion,
 which motivates the filtering and normalisation described next.
+Figure~\ref{fig:pose_estimation} shows an example of the estimator output on a
+running frame.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.60\textwidth]{figures_new/fig33_pose_estimation}
+\caption{MediaPipe BlazePose-33 applied to a sample running frame. The model
+produces 33 body landmarks with per-landmark visibility scores. A subset of
+13 landmarks relevant to running form --- nose, hips, knees, ankles, heels,
+and foot indices --- is selected for all downstream processing.}
+\label{fig:pose_estimation}
+\end{figure}
 
 % ---------------------------------------------------------------------
 \section{Landmark Filtering and Normalization}
@@ -145,7 +119,20 @@ relative to a body-centred reference and scaled by a body-size measure (for
 example a torso-span normalisation), removing dependence on where the runner
 appears in the image and how far they are from the camera. This normalisation is
 essential for in-the-wild video, where framing, zoom, and runner position vary
-arbitrarily between clips.
+arbitrarily between clips. Figure~\ref{fig:landmark_normalization} illustrates
+the effect on the vertical trajectories of the nose, hip, and heel landmarks.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures_new/fig34_landmark_normalization}
+\caption{Landmark vertical coordinates before (left) and after (right)
+hip-centred normalisation for an example video. Before normalisation, the
+trajectories drift with the runner's absolute position in the frame. After
+normalisation, all trajectories oscillate stably about zero (the hip
+reference) with consistent amplitude regardless of camera distance or
+runner position.}
+\label{fig:landmark_normalization}
+\end{figure}
 
 % ---------------------------------------------------------------------
 \section{Motion Signal Extraction}
@@ -184,7 +171,19 @@ more directly tied to ground contact but noisier
 (Chapter~\ref{ch:literature-review}). The pipeline supports any single signal as
 the detection driver; the comparison of signals is treated as an ablation
 (Chapter~\ref{ch:results}). Each signal is smoothed and detrended before
-detection to stabilise period estimation.
+detection to stabilise period estimation. Figure~\ref{fig:motion_signals} shows
+the four main signals over an example running clip.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures_new/fig35_motion_signals}
+\caption{Motion signals extracted from a single running video (DUNG27). Faint
+lines show the raw detrended signal; solid lines show the Gaussian-smoothed
+version ($\sigma=2$). The periodic oscillation visible in all four signals
+reflects the running cycle; \texttt{contact\_diff} captures left--right
+foot-contact asymmetry and is used as the primary cycle-detection driver.}
+\label{fig:motion_signals}
+\end{figure}
 
 % ---------------------------------------------------------------------
 \section{Running Cycle Detection}
@@ -244,6 +243,19 @@ This detector is the main \emph{automatic baseline} of the thesis: it uses only
 information available from the video itself, with no fixed-margin assumption on
 boundary placement, and produces cycles directly comparable to the handmade
 ones because the downstream stages are identical.
+Figure~\ref{fig:cycle_boundaries} shows an example detection result.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures_new/fig36_cycle_boundaries}
+\caption{Running cycle boundaries detected by the autocorrelation-based
+detector overlaid on the \texttt{contact\_diff} signal for an example video
+(DUNG27). Alternating shaded bands correspond to individual FS-to-FS cycles;
+red dashed lines mark the detected boundaries. The periodic structure of the
+signal makes the boundaries reliably locatable by the autocorrelation
+procedure.}
+\label{fig:cycle_boundaries}
+\end{figure}
 
 \subsection{Boundary Detector-Based Cycle Detection}
 \label{sec:method-bd}
@@ -325,6 +337,21 @@ source as the landmark baseline, so that the two differ only in representation
 
 Several classifiers are used across the representations and pipelines, chosen to
 span a range of temporal modelling capacity.
+Figure~\ref{fig:model_architectures} shows the layer-by-layer architectures of
+the four landmark-based models.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures_new/fig_model_architectures}
+\caption{Layer-by-layer architectures of the four landmark-based classifiers.
+All models receive an input tensor of shape $(B,\,8,\,78)$ --- batch size,
+eight gait phases, and $F{=}78$ features (13 joints $\times$ 3 coordinates
+$+$ 3 velocity components) --- and produce a single binary logit. Colour
+indicates layer type: blue --- linear; amber --- convolutional; violet ---
+recurrent (BiLSTM); green --- normalisation or pooling; grey --- utility
+(flatten, dropout).}
+\label{fig:model_architectures}
+\end{figure}
 
 \subsection{MLP Baseline}
 \label{sec:method-mlp}
